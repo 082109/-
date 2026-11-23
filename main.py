@@ -50,12 +50,6 @@ st.markdown("""
     color: white;
 }
 
-.number {
-    color: #ff625e;
-    font-size: 23px;
-    font-weight: bold;
-}
-
 .section-title {
     font-size: 38px;
     font-weight: bold;
@@ -85,6 +79,14 @@ st.markdown("""
 .point {
     color: #ff625e;
     font-weight: bold;
+}
+
+.formula-box {
+    background-color: #252525;
+    border: 1px solid #555555;
+    border-radius: 15px;
+    padding: 25px;
+    margin: 25px 0;
 }
 
 div.stButton > button {
@@ -129,9 +131,6 @@ if "page" not in st.session_state:
     st.session_state.page = 0
 
 
-# -------------------------------
-# 목차
-# -------------------------------
 contents = [
     "경사하강법이란?",
     "미분의 역할",
@@ -156,17 +155,13 @@ if st.session_state.page == 0:
         unsafe_allow_html=True
     )
 
-    st.markdown(
-        '<div class="line"></div>',
-        unsafe_allow_html=True
-    )
+    st.markdown('<div class="line"></div>', unsafe_allow_html=True)
 
     st.markdown(
         '<div class="contents-title">목차</div>',
         unsafe_allow_html=True
     )
 
-    # 1~3번
     cols = st.columns(3)
 
     for i in range(3):
@@ -178,7 +173,6 @@ if st.session_state.page == 0:
                 st.session_state.page = i + 1
                 st.rerun()
 
-    # 4~5번
     cols = st.columns(3)
 
     for i in range(3, 5):
@@ -190,20 +184,16 @@ if st.session_state.page == 0:
                 st.session_state.page = i + 1
                 st.rerun()
 
-    st.markdown(
-        '<div class="line"></div>',
-        unsafe_allow_html=True
-    )
+    st.markdown('<div class="line"></div>', unsafe_allow_html=True)
 
 
 # -------------------------------
-# 내용 화면
+# 각 내용 화면
 # -------------------------------
 else:
 
     page = st.session_state.page
 
-    # 처음 화면으로 돌아가기
     st.markdown('<div class="back-button">', unsafe_allow_html=True)
 
     if st.button("← 처음 화면으로", key="back"):
@@ -273,10 +263,30 @@ else:
         </div>
         """, unsafe_allow_html=True)
 
-        st.markdown("""
-        경사하강법에서 미분은 현재 위치에서 함수의 값이 어느 방향으로 작아지는지 판단하는 데 사용된다.
+        st.markdown("### 미분은 왜 필요할까?")
 
-        미분값의 부호에 따라 이동 방향을 알 수 있다.
+        st.markdown("""
+        산을 내려가는 상황을 생각해 보자.
+
+        현재 내가 산의 어느 지점에 있다고 가정해 보자.
+        가장 낮은 지점으로 내려가려면 먼저 어느 방향으로 움직여야 하는지 알아야겠지?
+
+        이때 **미분을 활용해.**
+        """)
+
+        st.markdown("""
+        <div class="content-box">
+        현재 위치에서 산의 기울기를 확인하면 어느 방향으로 내려가야 하는지 판단할 수 있어.
+
+        이처럼 미분은 현재 위치에서 함수의 값이 작아지는 방향을 알아내는 데 도움을 준다.
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("### 미분값에 따라 이동 방향은 달라진다.")
+
+        st.markdown("""
+        경사하강법에서는 현재 위치의 미분값을 확인하고,
+        그 부호에 따라 함수의 값이 작아지는 방향으로 이동한다.
         """)
 
         col1, col2 = st.columns(2)
@@ -285,7 +295,7 @@ else:
             st.markdown("""
             <div class="content-box">
             <h3>미분값이 양수일 때</h3>
-            함수가 오른쪽으로 갈수록 증가하므로
+            오른쪽으로 갈수록 함수의 값이 커지므로
             <span class="point">왼쪽 방향</span>으로 이동한다.
             </div>
             """, unsafe_allow_html=True)
@@ -294,7 +304,7 @@ else:
             st.markdown("""
             <div class="content-box">
             <h3>미분값이 음수일 때</h3>
-            함수가 오른쪽으로 갈수록 감소하므로
+            오른쪽으로 갈수록 함수의 값이 작아지므로
             <span class="point">오른쪽 방향</span>으로 이동한다.
             </div>
             """, unsafe_allow_html=True)
@@ -363,27 +373,80 @@ else:
         )
 
         st.markdown("""
-        경사하강법은 현재 위치에서 미분값과 학습률을 이용하여 다음 위치를 계산한다.
+        경사하강법은 현재 위치에서의 미분값과 학습률을 이용하여 다음 위치를 계산한다.
         """)
 
-        st.markdown('<div class="content-box">', unsafe_allow_html=True)
+        # 수식을 회색 상자 안에 표시
+        st.markdown('<div class="formula-box">', unsafe_allow_html=True)
         st.latex(r"x_{t+1}=x_t-\alpha f'(x_t)")
         st.markdown('</div>', unsafe_allow_html=True)
 
+        st.markdown("### 수식에 포함된 기호")
+
         st.markdown("""
-        **수식에 포함된 기호**
-
-        - \(x_t\) : 현재 위치
-        - \(x_{t+1}\) : 다음 위치
-        - \(\alpha\) : 학습률
-        - \(f'(x_t)\) : 현재 위치에서의 미분값
-
-        **왜 미분값을 빼는 것일까?**
-
-        미분값이 양수이면 왼쪽으로, 음수이면 오른쪽으로 이동해야 한다.
-
-        따라서 현재 위치에서 미분값에 학습률을 곱한 값을 빼는 방식으로 다음 위치를 계산한다.
+        - **\(x_t\)** : 현재 위치를 의미한다. 지금 함수 위에서 내가 서 있는 지점이다.
+        - **\(x_{t+1}\)** : 다음 위치를 의미한다. 미분값과 학습률을 이용해 새롭게 계산한 지점이다.
+        - **\(\alpha\)** : 학습률이다. 한 번에 얼마나 이동할지 결정한다.
+        - **\(f'(x_t)\)** : 현재 위치에서의 미분값이다. 현재 함수의 기울기를 나타낸다.
         """)
+
+        st.markdown("### 왜 미분값을 빼는 것일까?")
+
+        st.markdown("""
+        경사하강법은 함수의 값이 작아지는 방향으로 이동해야 한다.
+
+        - 미분값이 양수라면 오른쪽으로 갈수록 함수의 값이 커지므로 왼쪽으로 이동해야 한다.
+        - 미분값이 음수라면 오른쪽으로 갈수록 함수의 값이 작아지므로 오른쪽으로 이동해야 한다.
+
+        따라서 현재 위치에서 **미분값에 학습률을 곱한 값을 빼는 방식**으로 다음 위치를 계산한다.
+        """)
+
+        st.markdown("### 실제 계산으로 이해하기")
+
+        st.markdown("""
+        다음과 같은 함수를 생각해 보자.
+        """)
+
+        st.latex(r"f(x)=(x-4)^2")
+
+        st.markdown("""
+        이 함수의 미분값은 다음과 같다.
+        """)
+
+        st.latex(r"f'(x)=2(x-4)")
+
+        st.markdown("""
+        현재 위치를 \(x=0\), 학습률을 \(\alpha=0.25\)라고 가정해 보자.
+
+        **① 현재 위치에서 미분값 구하기**
+        """)
+
+        st.latex(r"f'(0)=2(0-4)=-8")
+
+        st.markdown("""
+        미분값이 -8이므로 현재 위치에서 함수는 오른쪽으로 갈수록 감소하는 방향이다.
+        
+        **② 경사하강법의 수식에 대입하기**
+        """)
+
+        st.latex(r"x_{t+1}=0-0.25\\times(-8)")
+
+        st.markdown("**③ 다음 위치 계산하기**")
+
+        st.latex(r"x_{t+1}=2")
+
+        st.markdown("""
+        처음에는 \(x=0\)에 있었지만, 계산 결과 다음 위치는 \(x=2\)가 되었다.
+
+        즉, 경사하강법은 미분값을 이용해 이동 방향을 정하고, 학습률을 곱해 이동 크기를 조절한 것이다.
+        """)
+
+        st.markdown("""
+        <div class="content-box">
+        <span class="point">핵심 정리</span><br>
+        현재 위치에서 미분값을 구하고, 여기에 학습률을 곱한 값을 현재 위치에서 빼면 다음 위치를 구할 수 있다.
+        </div>
+        """, unsafe_allow_html=True)
 
     # ---------------------------
     # 5. 경사하강법의 작동 과정
