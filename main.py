@@ -5,7 +5,7 @@ import pandas as pd
 import plotly.graph_objects as go
 
 # ==========================================
-# 1. 기본 설정
+# 1. 기본 설정 및 디자인
 # ==========================================
 
 st.set_page_config(
@@ -14,145 +14,436 @@ st.set_page_config(
     layout="wide"
 )
 
-# ==========================================
-# 2. 디자인
-# ==========================================
-
 st.markdown("""
 <style>
 .stApp {
     background-color: #101010;
     color: white;
 }
-
 h1, h2, h3 {
     color: white !important;
 }
-
 p, li {
     color: #dddddd;
     line-height: 1.8;
 }
-
-.main-title {
-    font-size: 38px;
-    font-weight: 800;
-    color: white;
-}
-
-.sub-title {
-    color: #aaaaaa;
-    font-size: 16px;
-    margin-bottom: 25px;
-}
-
-.section-number {
-    color: #ff5555;
-    font-size: 13px;
-    font-weight: bold;
-    letter-spacing: 2px;
-}
-
-.info-card {
+.card {
     background-color: #202020;
     border: 1px solid #383838;
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 12px;
 }
-
-.info-card h3 {
+.card h3 {
     color: #ff5555 !important;
 }
-
-.result-card {
-    background-color: #202020;
-    border-left: 4px solid #ff5555;
-    border-radius: 8px;
-    padding: 16px;
-    margin: 12px 0;
-}
-
-.highlight {
+.red {
     color: #ff5555;
     font-weight: bold;
-}
-
-.small-text {
-    color: #aaaaaa;
-    font-size: 13px;
-}
-
-hr {
-    border-color: #383838;
 }
 </style>
 """, unsafe_allow_html=True)
 
-
-# ==========================================
-# 제목
-# ==========================================
-
-st.markdown(
-    '<div class="main-title">GRADIENT DESCENT LAB</div>',
-    unsafe_allow_html=True
-)
-
-st.markdown(
-    '<div class="sub-title">미분으로 이해하는 인공지능의 학습 원리</div>',
-    unsafe_allow_html=True
-)
+st.title("📉 GRADIENT DESCENT LAB")
+st.caption("미분으로 이해하는 인공지능의 학습 원리")
 
 st.markdown("---")
 
 
 # ==========================================
-# 01. 최적화란?
+# 2. 최적화와 인공지능
 # ==========================================
 
-st.markdown(
-    '<div class="section-number">01 / OPTIMIZATION</div>',
-    unsafe_allow_html=True
-)
-
+st.markdown("### 01 / OPTIMIZATION")
 st.header("최적화란 무엇일까?")
 
 st.write("""
 최적화란 주어진 조건에서 함수의 값이 최대 또는 최소가 되는
-상태를 찾아내는 방법이다.
+상태를 찾아내는 과정이다.
 
-예를 들어 인공지능 모델이 어떤 값을 예측한다고 생각해 보자.
-모델의 예측값과 실제값 사이에 차이가 발생할 수 있는데,
-이 차이를 줄이는 것도 최적화의 한 과정이다.
+인공지능 모델도 학습 과정에서 최적화를 활용한다.
+모델이 예측한 값과 실제값 사이에는 오차가 발생할 수 있는데,
+인공지능은 이 오차를 줄이도록 내부의 값을 조정한다.
 
-변수가 적은 문제는 그래프로 표현할 수 있지만,
-변수가 많아지면 시각적으로 나타내기 어려워진다.
-따라서 복잡한 문제에서도 최적의 값을 찾아내기 위해
-다양한 최적화 알고리즘이 사용된다.
+이때 조정하는 대표적인 값이 가중치와 편향이다.
+""")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.markdown("""
+    <div class="card">
+    <h3>가중치 (Weight)</h3>
+    입력된 정보가 예측 결과에 얼마나 큰 영향을 미칠지
+    결정하는 값이다.
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.markdown("""
+    <div class="card">
+    <h3>편향 (Bias)</h3>
+    가중치와 입력값으로 계산한 결과에 추가하여
+    예측 결과를 조정하는 값이다.
+    </div>
+    """, unsafe_allow_html=True)
+
+st.write("""
+인공지능은 학습하면서 가중치와 편향을 조금씩 수정한다.
+이러한 값이 달라지면 모델의 예측 결과도 달라지고,
+결과적으로 예측 오차도 달라진다.
+""")
+
+st.markdown("---")
+
+
+# ==========================================
+# 3. 손실함수
+# ==========================================
+
+st.markdown("### 02 / LOSS FUNCTION")
+st.header("손실함수는 무엇일까?")
+
+st.write("""
+손실함수는 인공지능 모델의 예측값과 실제값 사이의 오차를
+수학적으로 나타내는 함수이다.
+
+예측값과 실제값의 차이가 클수록 손실함수의 값이 커지고,
+오차가 줄어들수록 손실함수의 값도 작아지도록 만들 수 있다.
+
+인공지능은 이 손실함수의 값을 최소화하는 방향으로 학습한다.
+""")
+
+st.latex(r"J(\theta)")
+
+st.write("""
+여기서 J는 손실함수이고, θ(세타)는 모델이 조정하는
+가중치와 편향 등의 값을 의미한다.
+
+즉, 인공지능은 손실함수의 값을 줄이기 위해
+가중치와 편향을 계속 수정하는 것이다.
 """)
 
 st.markdown("""
-<div class="info-card">
-    <h3>핵심 개념</h3>
-    <p>
-    최적화는 함수의 값을 가장 크게 하거나 작게 만드는
-    조건과 값을 찾아내는 과정이다.
-    </p>
+<div class="card">
+<h3>핵심 질문</h3>
+<p>
+그렇다면 인공지능은 현재 손실함수의 값이 어느 방향으로
+줄어드는지 어떻게 알 수 있을까?
+</p>
+<p class="red">
+이때 활용하는 것이 바로 미분이다.
+</p>
 </div>
 """, unsafe_allow_html=True)
 
-st.subheader("간단한 함수로 최솟값 확인하기")
+st.markdown("---")
 
-st.latex(r"y=x^2+2")
+
+# ==========================================
+# 4. 미분과 경사하강법의 관계
+# ==========================================
+
+st.markdown("### 03 / DERIVATIVE")
+st.header("미분은 경사하강법과 어떤 관계가 있을까?")
+
+st.subheader("① 미분은 순간변화율을 알려 준다")
 
 st.write("""
-위 함수는 x=0일 때 y=2로 가장 작은 값을 갖는다.
-따라서 최솟값은 2이다.
+미분은 특정한 위치에서 함수의 순간변화율을 구하는 방법이다.
+
+순간변화율은 현재 위치에서 x값이 아주 조금 변할 때
+y값이 얼마나 빠르게 변하는지를 나타낸다.
+
+그래프에서는 해당 위치에 그은 접선의 기울기로 이해할 수 있다.
 """)
 
-x_graph = np.linspace(-10, 10, 400)
-y_graph = x_graph ** 2 + 2
+st.latex(r"f'(x)=\text{순간변화율}")
+
+st.write("""
+경사하강법에서는 이 미분값을 이용해
+현재 위치에서 함수의 값이 증가하는지 감소하는지 판단한다.
+""")
+
+st.subheader("② 미분값에 따라 이동 방향이 달라진다")
+
+st.write("""
+함수의 최솟값을 찾는 상황을 생각해 보자.
+
+현재 위치에서 미분값이 양수라면 접선의 기울기가 양수라는 뜻이다.
+이때 오른쪽으로 이동하면 함수값이 증가하는 방향이므로,
+함수값을 줄이려면 왼쪽으로 이동해야 한다.
+
+반대로 미분값이 음수라면 접선의 기울기가 음수라는 뜻이다.
+이때는 오른쪽으로 이동할수록 함수값이 감소하므로,
+오른쪽으로 이동해야 한다.
+""")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.markdown("""
+    <div class="card">
+    <h3>미분값이 양수 (+)</h3>
+    <p>접선이 오른쪽 위로 올라가는 모양이다.</p>
+    <p>함수값을 줄이려면 왼쪽으로 이동한다.</p>
+    <h2>←</h2>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.markdown("""
+    <div class="card">
+    <h3>미분값이 음수 (-)</h3>
+    <p>접선이 오른쪽 아래로 내려가는 모양이다.</p>
+    <p>함수값을 줄이려면 오른쪽으로 이동한다.</p>
+    <h2>→</h2>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.subheader("③ 미분값을 직접 확인해 보자")
+
+st.write("""
+아래 함수에서 x의 위치를 바꾸어 보자.
+현재 위치의 접선과 미분값이 어떻게 달라지는지 확인할 수 있다.
+""")
+
+st.latex(r"f(x)=x^2+2")
+st.latex(r"f'(x)=2x")
+
+a = st.slider(
+    "현재 위치 x",
+    min_value=-8.0,
+    max_value=8.0,
+    value=5.0,
+    step=0.5,
+    key="derivative_x"
+)
+
+# 현재 위치의 함수값과 미분값
+fa = a**2 + 2
+slope = 2*a
+
+# 접선의 방정식
+x_tangent = np.linspace(-10, 10, 300)
+y_tangent = fa + slope * (x_tangent - a)
+
+x_curve = np.linspace(-10, 10, 400)
+y_curve = x_curve**2 + 2
+
+fig_derivative = go.Figure()
+
+fig_derivative.add_trace(go.Scatter(
+    x=x_curve,
+    y=y_curve,
+    mode="lines",
+    name="함수",
+    line=dict(color="#ff5555", width=3)
+))
+
+fig_derivative.add_trace(go.Scatter(
+    x=x_tangent,
+    y=y_tangent,
+    mode="lines",
+    name="현재 위치의 접선",
+    line=dict(color="#2589ff", width=2, dash="dash")
+))
+
+fig_derivative.add_trace(go.Scatter(
+    x=[a],
+    y=[fa],
+    mode="markers",
+    name="현재 위치",
+    marker=dict(color="yellow", size=12)
+))
+
+fig_derivative.update_layout(
+    template="plotly_dark",
+    paper_bgcolor="#101010",
+    plot_bgcolor="#202020",
+    xaxis_title="x",
+    yaxis_title="f(x)",
+    height=450
+)
+
+st.plotly_chart(fig_derivative, use_container_width=True)
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.metric("현재 함수값", f"{fa:.2f}")
+
+with col2:
+    st.metric("현재 미분값", f"{slope:.2f}")
+
+if slope > 0:
+    st.info("미분값이 양수야. 함수값을 줄이려면 왼쪽으로 이동해야 해.")
+elif slope < 0:
+    st.info("미분값이 음수야. 함수값을 줄이려면 오른쪽으로 이동해야 해.")
+else:
+    st.success("미분값이 0이야. 이 함수에서는 최솟값에 도달한 상태야.")
+
+st.write("""
+**여기서 기억할 점!**
+
+미분값은 단순히 함수의 높이를 알려 주는 것이 아니다.
+현재 위치에서 함수가 어느 방향으로 얼마나 빠르게 변하는지를
+알려 주기 때문에 경사하강법에서 중요한 역할을 한다.
+""")
+
+st.markdown("---")
+
+
+# ==========================================
+# 5. 학습률과 경사하강법 수식
+# ==========================================
+
+st.markdown("### 04 / GRADIENT DESCENT FORMULA")
+st.header("미분값으로 다음 위치를 계산한다")
+
+st.write("""
+미분값을 구했다면 이제 함수값이 감소하는 방향으로
+얼마나 이동할지 결정해야 한다.
+
+이때 사용하는 값이 학습률이다.
+""")
+
+st.subheader("학습률 (Learning Rate)")
+
+st.write("""
+학습률은 한 번의 계산에서 현재 값을 얼마나 크게 수정할지
+결정하는 값이다.
+
+미분값이 이동 방향을 알려 준다면,
+학습률은 그 방향으로 얼마나 이동할지 조절한다.
+""")
+
+st.markdown("""
+<div class="card">
+<h3>미분값과 학습률의 차이</h3>
+<p><b>미분값</b> : 어느 방향으로 이동해야 하는지 판단하는 기준</p>
+<p><b>학습률</b> : 한 번에 얼마나 이동할지 조절하는 값</p>
+</div>
+""", unsafe_allow_html=True)
+
+st.subheader("경사하강법의 수식")
+
+st.latex(r"x_{t+1}=x_t-\alpha f'(x_t)")
+
+st.write("""
+이 수식은 다음 위치를 계산하는 방법을 나타낸다.
+
+현재 위치에서 미분값에 학습률을 곱한 값을 빼면
+다음 위치를 구할 수 있다.
+""")
+
+st.markdown("""
+<div class="card">
+<h3>수식의 의미</h3>
+<p><b>xₜ</b> : 현재 위치</p>
+<p><b>xₜ₊₁</b> : 다음 위치</p>
+<p><b>f'(xₜ)</b> : 현재 위치에서의 미분값</p>
+<p><b>α</b> : 학습률</p>
+</div>
+""", unsafe_allow_html=True)
+
+st.write("""
+왜 미분값을 빼는 걸까?
+
+미분값이 양수이면 양수를 빼기 때문에 x값이 작아진다.
+미분값이 음수이면 음수를 빼기 때문에 x값이 커진다.
+
+따라서 이 수식은 미분값의 반대 방향으로 이동하도록 만들어져 있다.
+이렇게 함수값이 감소하는 방향으로 이동하는 과정을 반복하는 것이
+경사하강법이다.
+""")
+
+st.subheader("인공지능에서는 어떻게 적용될까?")
+
+st.write("""
+실제 인공지능 모델에서는 하나의 x값이 아니라
+여러 개의 가중치와 편향을 동시에 조정한다.
+
+이때 각 변수에 대한 편미분값을 모아 기울기(Gradient)를 구한다.
+기울기는 여러 변수의 변화 방향을 함께 나타내는 값이다.
+
+따라서 실제 인공지능 모델에서는 다음과 같은 수식을 사용한다.
+""")
+
+st.latex(r"\theta_{t+1}=\theta_t-\alpha\nabla J(\theta_t)")
+
+st.write("""
+여기서 ∇J(θₜ)는 현재 파라미터 위치에서 구한 손실함수의 기울기이다.
+
+즉, 하나의 변수만 다루는 경우에는 미분값을 사용하고,
+여러 변수를 다루는 경우에는 각 변수의 편미분값으로 구성된
+기울기를 사용한다.
+""")
+
+st.markdown("---")
+
+
+# ==========================================
+# 6. 그래프를 이용한 경사하강법 체험
+# ==========================================
+
+st.markdown("### 05 / INTERACTIVE EXPERIMENT")
+st.header("직접 경사하강법 실험하기")
+
+st.write("""
+이번에는 미분을 이용해 실제로 최솟값을 찾아보자.
+
+실험에 사용할 함수는 다음과 같다.
+""")
+
+st.latex(r"f(x)=x^2+2")
+st.latex(r"f'(x)=2x")
+
+st.write("""
+이 함수는 x=0일 때 최솟값 2를 갖는다.
+시작 위치와 학습률을 바꾸면서 최솟값을 찾아가는 과정을 확인해 보자.
+""")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    start_x = st.slider(
+        "시작 위치",
+        -10.0, 10.0, 10.0,
+        step=0.5
+    )
+
+with col2:
+    learning_rate = st.slider(
+        "학습률",
+        0.01, 1.50, 0.10,
+        step=0.01,
+        format="%.2f"
+    )
+
+iterations = st.slider(
+    "반복 횟수",
+    1, 30, 10
+)
+
+# 경사하강법 계산
+x_values = [start_x]
+loss_values = [start_x**2 + 2]
+
+current_x = start_x
+
+for i in range(iterations):
+    derivative = 2 * current_x
+    current_x = current_x - learning_rate * derivative
+
+    x_values.append(current_x)
+    loss_values.append(current_x**2 + 2)
+
+# 그래프
+limit = max(10, min(100, max(abs(v) for v in x_values) * 1.2))
+
+x_graph = np.linspace(-limit, limit, 400)
+y_graph = x_graph**2 + 2
 
 fig = go.Figure()
 
@@ -160,372 +451,28 @@ fig.add_trace(go.Scatter(
     x=x_graph,
     y=y_graph,
     mode="lines",
-    name="y = x² + 2",
-    line=dict(color="#ff5555", width=3)
-))
-
-fig.add_trace(go.Scatter(
-    x=[0],
-    y=[2],
-    mode="markers+text",
-    name="최솟값",
-    text=["최솟값 (0, 2)"],
-    textposition="top center",
-    marker=dict(color="#2589ff", size=12)
-))
-
-fig.update_layout(
-    template="plotly_dark",
-    paper_bgcolor="#101010",
-    plot_bgcolor="#202020",
-    xaxis_title="x",
-    yaxis_title="y",
-    height=400
-)
-
-st.plotly_chart(fig, use_container_width=True)
-
-st.markdown("---")
-
-
-# ==========================================
-# 02. 인공지능 모델의 가중치와 편향
-# ==========================================
-
-st.markdown(
-    '<div class="section-number">02 / MODEL PARAMETERS</div>',
-    unsafe_allow_html=True
-)
-
-st.header("인공지능은 무엇을 조정할까?")
-
-st.write("""
-인공지능 모델은 데이터를 학습하면서 예측 결과가 실제 결과에
-가까워지도록 내부의 여러 값을 조정한다.
-
-이때 대표적으로 조정되는 값이 가중치(Weight)와 편향(Bias)이다.
-""")
-
-col1, col2 = st.columns(2)
-
-with col1:
-    st.markdown("""
-    <div class="info-card">
-        <h3>가중치 (Weight)</h3>
-        <p>
-        입력된 정보가 예측 결과에 얼마나 큰 영향을 미치는지를
-        결정하는 값이다.
-        </p>
-        <p>
-        예를 들어 어떤 정보가 예측에 더 중요하게 반영되도록
-        그 영향력을 조절하는 역할을 한다.
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-
-with col2:
-    st.markdown("""
-    <div class="info-card">
-        <h3>편향 (Bias)</h3>
-        <p>
-        입력값과 가중치만으로 결정되는 결과에 추가로 더해지는 값이다.
-        </p>
-        <p>
-        모델의 예측 결과가 적절한 위치에 오도록
-        조정하는 역할을 한다.
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-
-st.write("""
-인공지능은 학습 과정에서 가중치와 편향을 조금씩 수정한다.
-이러한 조정을 통해 예측값과 실제값 사이의 오차를 줄여 나간다.
-""")
-
-st.markdown("""
-<div class="result-card">
-    <b>정리</b><br>
-    가중치와 편향은 인공지능 모델이 학습하면서 조정하는 값이며,
-    이러한 값을 통틀어 모델의 파라미터라고 부른다.
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown("---")
-
-
-# ==========================================
-# 03. 손실함수와 기울기
-# ==========================================
-
-st.markdown(
-    '<div class="section-number">03 / LOSS FUNCTION & GRADIENT</div>',
-    unsafe_allow_html=True
-)
-
-st.header("손실함수와 기울기는 무엇일까?")
-
-st.subheader("① 손실함수 (Loss Function)")
-
-st.write("""
-손실함수는 인공지능 모델이 예측한 값과 실제값 사이의 오차를
-수학적으로 나타낸 함수이다.
-
-예측값과 실제값의 차이가 클수록 손실함수의 값도 커지고,
-오차가 줄어들수록 손실함수의 값도 작아지도록 설정할 수 있다.
-""")
-
-st.latex(r"J(\theta)")
-
-st.write("""
-여기서 J는 손실함수를 의미하고,
-θ(세타)는 모델이 학습하면서 조정하는 파라미터를 나타낸다.
-
-즉, 가중치와 편향이 달라지면 예측 결과가 달라지고,
-이에 따라 손실함수의 값도 달라진다.
-""")
-
-st.markdown("""
-<div class="info-card">
-    <h3>② 기울기 (Gradient)</h3>
-    <p>
-    기울기는 현재 위치에서 손실함수의 값이
-    어느 방향으로 얼마나 빠르게 변하는지를 나타낸다.
-    </p>
-    <p>
-    기울기를 확인하면 손실함수의 값이 증가하는 방향과
-    감소하는 방향을 판단할 수 있다.
-    </p>
-</div>
-""", unsafe_allow_html=True)
-
-st.write("""
-변수가 하나일 때는 미분값으로 기울기를 확인할 수 있다.
-하지만 인공지능 모델처럼 조정할 값이 여러 개라면
-각 변수에 대한 편미분값을 모아 기울기(Gradient)를 구한다.
-
-이렇게 구한 기울기를 이용해 가중치와 편향을
-어느 방향으로 얼마나 조정할지 결정한다.
-""")
-
-st.latex(r"\nabla J(\theta)")
-
-st.markdown("---")
-
-
-# ==========================================
-# 04. 경사하강법의 수식과 원리
-# ==========================================
-
-st.markdown(
-    '<div class="section-number">04 / GRADIENT DESCENT</div>',
-    unsafe_allow_html=True
-)
-
-st.header("경사하강법이란?")
-
-st.write("""
-경사하강법은 손실함수의 값을 최소화하기 위해
-현재 모델의 파라미터를 조금씩 조정하는 최적화 알고리즘이다.
-
-현재 위치에서 기울기를 확인한 뒤,
-손실함수의 값이 감소하는 방향으로 이동하는 과정을 반복한다.
-""")
-
-st.subheader("경사하강법의 핵심 수식")
-
-st.latex(
-    r"\theta_{t+1}=\theta_t-\alpha\nabla J(\theta_t)"
-)
-
-st.write("사진 속 수식을 구성하는 각 기호를 살펴보자.")
-
-formula_items = [
-    ("θₜ", "현재 파라미터", "현재 모델이 가지고 있는 가중치와 편향 등의 값"),
-    ("θₜ₊₁", "다음 파라미터", "현재 값을 조정한 후 새롭게 정해지는 값"),
-    ("α", "학습률 (Learning rate)", "한 번에 파라미터를 얼마나 크게 수정할지 결정하는 값"),
-    ("∇J(θₜ)", "기울기 (Gradient)", "현재 파라미터 위치에서 손실함수가 변하는 방향과 정도")
-]
-
-for symbol, title, description in formula_items:
-    st.markdown(f"""
-    <div class="info-card">
-        <h3>{symbol} : {title}</h3>
-        <p>{description}</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-st.subheader("왜 기울기를 빼는 것일까?")
-
-st.write("""
-경사하강법은 손실함수의 값을 줄이는 방향으로 이동해야 한다.
-
-기울기가 양수라면 현재 위치에서 오른쪽으로 갈수록
-함수의 값이 증가하는 경향이 있으므로 왼쪽으로 이동해야 한다.
-
-반대로 기울기가 음수라면 오른쪽으로 갈수록
-함수의 값이 감소하는 경향이 있으므로 오른쪽으로 이동해야 한다.
-
-따라서 현재 기울기의 반대 방향으로 이동하도록
-수식에서 기울기를 빼는 것이다.
-""")
-
-col1, col2 = st.columns(2)
-
-with col1:
-    st.markdown("""
-    <div class="info-card">
-        <h3>기울기가 양수 (+)</h3>
-        <p>기울기를 빼면 현재 값이 작아진다.</p>
-        <p class="highlight">왼쪽 방향으로 이동 ←</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-with col2:
-    st.markdown("""
-    <div class="info-card">
-        <h3>기울기가 음수 (-)</h3>
-        <p>음수인 기울기를 빼면 현재 값이 커진다.</p>
-        <p class="highlight">오른쪽 방향으로 이동 →</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-st.subheader("학습률은 왜 중요할까?")
-
-st.write("""
-학습률은 한 번 이동할 때 파라미터를 얼마나 크게 바꿀지 결정한다.
-
-학습률이 너무 작으면 조금씩 이동하기 때문에
-손실함수를 최소화하는 데 많은 반복이 필요할 수 있다.
-
-반대로 학습률이 너무 크면 최솟값을 지나치거나
-오히려 최솟값에서 멀어질 수 있다.
-
-따라서 손실함수를 안정적으로 줄이기 위해서는
-적절한 학습률을 선택하는 것이 중요하다.
-""")
-
-st.markdown("""
-<div class="result-card">
-    <b>경사하강법의 핵심 과정</b><br>
-    현재 파라미터 확인 → 기울기 계산 → 학습률 적용 →
-    파라미터 수정 → 이 과정을 반복하며 손실함수 최소화
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown("---")
-
-
-# ==========================================
-# 05. 그래프로 직접 체험하기
-# ==========================================
-
-st.markdown(
-    '<div class="section-number">05 / INTERACTIVE EXPERIMENT</div>',
-    unsafe_allow_html=True
-)
-
-st.header("직접 경사하강법 실험하기")
-
-st.write("""
-앞에서 배운 원리를 간단한 이차함수에 적용해 보자.
-
-실제 인공지능에서는 여러 개의 가중치와 편향을 조정하지만,
-이번 실험에서는 이해하기 쉽도록 하나의 변수 x만 조정한다.
-
-함수의 값이 최소가 되는 x를 찾아가는 과정을 확인해 보자.
-""")
-
-st.latex(r"f(x)=x^2+2")
-
-st.latex(r"f'(x)=2x")
-
-st.write("""
-이 함수의 최솟값은 x=0일 때 2이다.
-시작 위치와 학습률, 반복 횟수를 바꾸면서
-경사하강법의 이동 과정을 관찰해 보자.
-""")
-
-col1, col2 = st.columns(2)
-
-with col1:
-    start_x = st.slider(
-        "시작 위치 x",
-        min_value=-10.0,
-        max_value=10.0,
-        value=10.0,
-        step=0.5
-    )
-
-with col2:
-    learning_rate = st.slider(
-        "학습률 (Step size)",
-        min_value=0.01,
-        max_value=1.5,
-        value=0.1,
-        step=0.01,
-        format="%.2f"
-    )
-
-iterations = st.slider(
-    "반복 횟수",
-    min_value=1,
-    max_value=30,
-    value=10
-)
-
-# 경사하강법 계산
-x_values = [start_x]
-loss_values = [start_x ** 2 + 2]
-
-current_x = start_x
-
-for i in range(iterations):
-    derivative = 2 * current_x
-    next_x = current_x - learning_rate * derivative
-
-    current_x = next_x
-
-    x_values.append(current_x)
-    loss_values.append(current_x ** 2 + 2)
-
-# 그래프 범위 계산
-max_abs_x = max(10, max(abs(v) for v in x_values))
-graph_limit = min(max_abs_x * 1.15, 100000)
-
-x_graph = np.linspace(-graph_limit, graph_limit, 500)
-y_graph = x_graph ** 2 + 2
-
-# 함수 그래프
-fig2 = go.Figure()
-
-fig2.add_trace(go.Scatter(
-    x=x_graph,
-    y=y_graph,
-    mode="lines",
     name="손실함수",
     line=dict(color="#ff5555", width=3)
 ))
 
-# 이동 경로
-fig2.add_trace(go.Scatter(
+fig.add_trace(go.Scatter(
     x=x_values,
     y=loss_values,
     mode="lines+markers",
     name="이동 경로",
     line=dict(color="#2589ff", width=2),
-    marker=dict(size=8, color="#2589ff")
+    marker=dict(size=8)
 ))
 
-# 최솟값
-fig2.add_trace(go.Scatter(
+fig.add_trace(go.Scatter(
     x=[0],
     y=[2],
     mode="markers",
     name="최솟값",
-    marker=dict(color="#ff5555", size=13, symbol="star")
+    marker=dict(color="yellow", size=13, symbol="star")
 ))
 
-fig2.update_layout(
+fig.update_layout(
     template="plotly_dark",
     paper_bgcolor="#101010",
     plot_bgcolor="#202020",
@@ -534,9 +481,8 @@ fig2.update_layout(
     height=480
 )
 
-st.plotly_chart(fig2, use_container_width=True)
+st.plotly_chart(fig, use_container_width=True)
 
-# 결과
 col1, col2, col3 = st.columns(3)
 
 with col1:
@@ -548,182 +494,147 @@ with col2:
 with col3:
     st.metric("최종 함수값", f"{loss_values[-1]:.5f}")
 
-# 수렴 상태
 if abs(current_x) < 0.1:
     st.success("최솟값에 가까워졌어!")
 elif learning_rate == 1.0:
     st.warning("최솟값을 기준으로 양쪽을 반복해서 이동하고 있어.")
 elif learning_rate > 1.0:
-    st.error("이 함수에서는 학습률이 너무 커서 최솟값에서 멀어지고 있어.")
+    st.error("학습률이 너무 커서 최솟값에서 멀어지고 있어.")
 else:
     st.info("반복 횟수를 늘려 최솟값에 가까워지는지 확인해 보자.")
 
-# 이동 과정 표
-st.subheader("반복에 따른 이동 과정")
+st.subheader("반복 과정 확인하기")
 
-result_df = pd.DataFrame({
+result = pd.DataFrame({
     "반복 횟수": range(iterations + 1),
-    "현재 x값": [round(v, 5) for v in x_values],
+    "현재 위치": [round(v, 5) for v in x_values],
     "함수값": [round(v, 5) for v in loss_values]
 })
 
-st.dataframe(
-    result_df,
-    use_container_width=True,
-    hide_index=True
-)
+st.dataframe(result, use_container_width=True, hide_index=True)
 
 st.markdown("---")
 
 
 # ==========================================
-# 06. 학습률에 따른 결과 비교
+# 7. 학습률 자유롭게 비교하기
 # ==========================================
 
-st.markdown(
-    '<div class="section-number">06 / LEARNING RATE</div>',
-    unsafe_allow_html=True
-)
-
-st.header("학습률에 따라 결과가 어떻게 달라질까?")
+st.markdown("### 06 / LEARNING RATE EXPERIMENT")
+st.header("학습률에 따라 어떻게 달라질까?")
 
 st.write("""
-학습률을 직접 조절해 보면서 최솟값에 가까워지는 과정을 비교해 보자.
+학습률을 직접 바꾸면서 최솟값에 도달하는 과정이
+어떻게 달라지는지 관찰해 보자.
 
-아래 그래프에서는 시작 위치를 x=10으로 고정하고,
-학습률을 자유롭게 조절할 수 있다.
+학습률이 작으면 이동량도 작아져 최솟값에 도달하기까지
+더 많은 반복이 필요할 수 있다.
+
+반대로 학습률이 너무 크면 최솟값을 지나쳐
+반복할수록 오히려 멀어질 수 있다.
 """)
 
-compare_rate = st.slider(
+rate = st.slider(
     "비교할 학습률",
-    min_value=0.01,
-    max_value=1.5,
-    value=0.6,
+    0.01, 1.50, 0.60,
     step=0.01,
     format="%.2f",
-    key="compare_rate"
+    key="rate_compare"
 )
 
 compare_x = [10.0]
 compare_y = [102.0]
 
-current_x = 10.0
-converged = False
+current = 10.0
 
-for i in range(1000):
-    derivative = 2 * current_x
-    current_x = current_x - compare_rate * derivative
+for i in range(30):
+    current = current - rate * (2 * current)
+    compare_x.append(current)
+    compare_y.append(current**2 + 2)
 
-    compare_x.append(current_x)
-    compare_y.append(current_x ** 2 + 2)
-
-    if abs(current_x) < 0.1:
-        converged = True
+    if abs(current) > 100000:
         break
 
-# 비교 그래프
 display_count = min(len(compare_x), 30)
 
-fig3 = go.Figure()
+fig2 = go.Figure()
 
-# 함수 그래프
-fig3.add_trace(go.Scatter(
+fig2.add_trace(go.Scatter(
     x=x_graph,
     y=y_graph,
     mode="lines",
-    name="y = x² + 2",
-    line=dict(color="#ff7777", width=3)
+    name="함수",
+    line=dict(color="#ff5555", width=3)
 ))
 
-# 이동 경로
-fig3.add_trace(go.Scatter(
+fig2.add_trace(go.Scatter(
     x=compare_x[:display_count],
     y=compare_y[:display_count],
     mode="lines+markers",
-    name="이동 경로",
+    name="이동 과정",
     line=dict(color="#2589ff", width=2),
     marker=dict(size=7)
 ))
 
-fig3.add_trace(go.Scatter(
+fig2.add_trace(go.Scatter(
     x=[0],
     y=[2],
     mode="markers",
     name="최솟값",
-    marker=dict(color="#ff5555", size=13, symbol="star")
+    marker=dict(color="yellow", size=13, symbol="star")
 ))
 
-fig3.update_layout(
+fig2.update_layout(
     template="plotly_dark",
     paper_bgcolor="#101010",
     plot_bgcolor="#202020",
     xaxis_title="x",
-    yaxis_title="y",
+    yaxis_title="f(x)",
     height=450
 )
 
-st.plotly_chart(fig3, use_container_width=True)
+st.plotly_chart(fig2, use_container_width=True)
 
-if converged:
-    st.success(
-        f"최솟값에 가까워졌어! "
-        f"필요한 반복 횟수는 {len(compare_x)-1}회야."
-    )
-elif compare_rate == 1.0:
-    st.warning(
-        "최솟값을 기준으로 양쪽을 반복해서 이동하고 있어. "
-        "함수값이 줄어들지 않아."
-    )
-elif compare_rate > 1.0:
-    st.error(
-        "학습률이 너무 커서 최솟값에서 멀어지고 있어."
-    )
+if abs(current) < 0.1:
+    st.success("최솟값에 가까워졌어!")
+elif rate == 1.0:
+    st.warning("최솟값을 중심으로 반복해서 움직이고 있어.")
+elif rate > 1.0:
+    st.error("학습률이 너무 커서 최솟값에서 멀어지고 있어.")
 else:
-    st.info(
-        "현재 설정에서는 아직 최솟값에 도달하지 않았어. "
-        "반복 횟수나 학습률을 바꾸어 보자."
-    )
+    st.info("학습률과 반복 횟수를 바꾸어 결과를 비교해 보자.")
 
 st.markdown("---")
 
 
 # ==========================================
-# 07. 핵심 내용 정리
+# 8. 마무리
 # ==========================================
 
-st.markdown(
-    '<div class="section-number">07 / SUMMARY</div>',
-    unsafe_allow_html=True
-)
+st.markdown("### 07 / SUMMARY")
+st.header("오늘 배운 내용 정리")
 
-st.header("경사하강법 핵심 내용 정리")
-
-summary_items = [
-    ("최적화", "함수의 최댓값이나 최솟값을 찾는 과정"),
-    ("가중치와 편향", "인공지능 모델이 학습하면서 조정하는 값"),
-    ("손실함수", "예측값과 실제값 사이의 오차를 나타내는 함수"),
-    ("기울기", "손실함수가 변하는 방향과 정도"),
-    ("학습률", "한 번에 값을 얼마나 수정할지 결정하는 값"),
-    ("경사하강법", "기울기를 이용해 손실함수를 최소화하는 최적화 알고리즘")
+summary = [
+    ("미분", "현재 위치에서 함수의 순간변화율을 구한다."),
+    ("미분값", "함수가 증가하거나 감소하는 방향과 변화 정도를 판단하는 데 활용한다."),
+    ("학습률", "한 번의 이동에서 수정할 크기를 조절한다."),
+    ("손실함수", "인공지능 모델의 예측 오차를 나타낸다."),
+    ("경사하강법", "미분 또는 기울기를 활용해 손실함수의 값을 줄이는 최적화 알고리즘이다.")
 ]
 
-for title, description in summary_items:
+for title, desc in summary:
     st.markdown(f"""
-    <div class="result-card">
-        <b class="highlight">{title}</b><br>
-        {description}
+    <div class="card">
+    <h3>{title}</h3>
+    <p>{desc}</p>
     </div>
     """, unsafe_allow_html=True)
 
-st.subheader("마무리")
-
 st.write("""
-경사하강법은 인공지능 모델의 손실함수를 최소화하기 위해
-가중치와 편향을 조정하는 최적화 알고리즘이다.
+경사하강법은 단순히 값을 반복해서 바꾸는 방법이 아니다.
+미분을 통해 현재 위치에서 함수가 어떻게 변하는지 파악하고,
+그 정보를 바탕으로 함수값이 감소하는 방향으로 이동한다.
 
-현재 위치에서 기울기를 계산하고 학습률을 적용하여
-파라미터를 조금씩 수정하는 과정을 반복한다.
-
-이번 실험을 통해 학습률에 따라 최솟값에 도달하는 과정이
-어떻게 달라지는지 직접 확인할 수 있다.
+이처럼 미분은 경사하강법이 최솟값을 찾아가는 데 필요한
+방향과 변화 정도를 알려 주는 핵심적인 수학적 도구이다.
 """)
