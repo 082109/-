@@ -8,7 +8,7 @@ st.set_page_config(
 )
 
 # -------------------------------
-# 디자인
+# 기본 디자인
 # -------------------------------
 st.markdown("""
 <style>
@@ -23,7 +23,7 @@ st.markdown("""
     max-width: 1100px;
 }
 
-h1, h2, h3, p, label {
+h1, h2, h3, p, li, div {
     color: white;
 }
 
@@ -35,12 +35,12 @@ h1, h2, h3, p, label {
 
 .sub-title {
     color: #aaaaaa;
-    font-size: 20px;
+    font-size: 17px;
     margin-bottom: 45px;
 }
 
 .section-title {
-    font-size: 30px;
+    font-size: 27px;
     font-weight: 750;
     margin-top: 55px;
     margin-bottom: 20px;
@@ -49,7 +49,7 @@ h1, h2, h3, p, label {
 .section-number {
     color: #ff625e;
     font-weight: bold;
-    font-size: 17px;
+    font-size: 15px;
 }
 
 .example-card {
@@ -57,19 +57,19 @@ h1, h2, h3, p, label {
     border: 1px solid #333333;
     border-radius: 13px;
     padding: 22px;
-    min-height: 190px;
+    min-height: 145px;
     margin-bottom: 12px;
 }
 
 .example-card h3 {
-    font-size: 22px;
-    margin-bottom: 12px;
+    font-size: 19px;
+    margin-bottom: 10px;
 }
 
 .example-card p {
     color: #bbbbbb;
-    font-size: 18px;
-    line-height: 1.8;
+    font-size: 14px;
+    line-height: 1.6;
 }
 
 .highlight {
@@ -77,19 +77,33 @@ h1, h2, h3, p, label {
     font-weight: bold;
 }
 
-div[data-testid="stVerticalBlockBorderWrapper"] {
-    border-color: #393939;
-    border-radius: 12px;
+.step-card {
+    background-color: #1d1d1d;
+    border-left: 4px solid #ff625e;
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-bottom: 12px;
+}
+
+.step-card p {
+    color: #cccccc;
+    margin-bottom: 0;
+    line-height: 1.7;
+}
+
+.explain-box {
     background-color: #202020;
+    border: 1px solid #393939;
+    border-radius: 12px;
+    padding: 25px;
+    line-height: 1.8;
+    margin-top: 15px;
 }
 
-.stMarkdown p, .stMarkdown li {
-    font-size: 19px;
-    line-height: 1.9;
-}
-
-.stCaption {
-    font-size: 15px;
+hr {
+    border-color: #333333;
+    margin-top: 35px;
+    margin-bottom: 35px;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -104,389 +118,172 @@ st.markdown(
 )
 
 st.markdown(
-    '<div class="sub-title">다양한 인공지능 기술 속 경사하강법</div>',
+    '<div class="sub-title">인공지능은 경사하강법을 어떻게 활용할까?</div>',
     unsafe_allow_html=True
 )
 
 
 # -------------------------------
-# 01. 경사하강법이란?
+# 01. 활용 사례
 # -------------------------------
 st.markdown(
-    '<div class="section-number">01 / CONCEPT</div>'
-    '<div class="section-title">경사하강법이란?</div>',
-    unsafe_allow_html=True
-)
-
-with st.container(border=True):
-    st.write(
-        "인공지능은 데이터를 바탕으로 결과를 예측하고, "
-        "예측 결과와 실제 결과의 차이를 줄이는 과정을 통해 학습한다."
-    )
-
-    st.write(
-        "이때 인공지능 모델은 예측에 영향을 주는 "
-        "**가중치(Weight)**와 **편향(Bias)**이라는 값을 사용한다."
-    )
-
-    st.markdown("""
-    - **가중치:** 입력된 정보가 예측 결과에 얼마나 큰 영향을 미치는지 나타내는 값
-    - **편향:** 예측 결과를 조정하는 데 사용되는 값
-    """)
-
-    st.write(
-        "인공지능은 예측 결과와 실제 결과의 차이를 "
-        "**손실함수**로 계산한다. 손실함수의 값이 작을수록 "
-        "예측 결과가 실제 결과에 가까워진다."
-    )
-
-    st.write(
-        "경사하강법은 손실함수를 미분하여 손실값이 작아지는 방향을 찾고, "
-        "가중치와 편향을 조금씩 조정하는 방법이다."
-    )
-
-    st.latex(
-        r"\text{새로운 값}"
-        r"=\text{기존 값}"
-        r"-\text{학습률}\times\text{미분값}"
-    )
-
-    st.write(
-        "여기서 학습률은 한 번에 값을 얼마나 조정할지 정하는 값이다. "
-        "이 과정을 반복하여 손실함수를 최소화하고 "
-        "인공지능 모델의 예측 성능을 개선한다."
-    )
-
-
-# -------------------------------
-# 02. 활용 사례
-# -------------------------------
-st.markdown(
-    '<div class="section-number">02 / APPLICATION</div>'
+    '<div class="section-number">01 / APPLICATION</div>'
     '<div class="section-title">경사하강법은 어디에 활용될까?</div>',
     unsafe_allow_html=True
 )
 
 st.write(
-    "경사하강법은 인공지능 모델을 학습시키는 과정에서 "
-    "예측 오차를 줄이는 데 활용된다. 다양한 활용 사례를 살펴보자."
+    "경사하강법은 인공지능이 학습하는 과정에서 예측 오차를 줄이는 데 "
+    "활용되는 방법이다. 다양한 인공지능 기술의 학습 과정에서 사용될 수 있다."
 )
 
 examples = [
-    (
-        "🖼️ 이미지 인식",
-        "고양이와 강아지 사진을 구별하는 인공지능을 학습시킬 때 활용된다. "
-        "이미지를 잘못 분류한 결과를 줄이도록 모델을 조정한다."
-    ),
-    (
-        "🎙️ 음성 인식",
-        "사람의 음성을 문자로 변환하는 기술에 활용된다. "
-        "예측한 문장과 실제 문장의 차이를 줄이도록 학습한다."
-    ),
-    (
-        "🌐 기계 번역",
-        "한 언어의 문장을 다른 언어로 번역하는 인공지능에 활용된다. "
-        "번역 결과가 정답 문장에 가까워지도록 모델을 학습시킨다."
-    ),
-    (
-        "🎬 콘텐츠 추천",
-        "사용자의 시청 기록과 선호도를 바탕으로 관심 있을 만한 영상을 예측한다. "
-        "예측 결과와 실제 반응의 차이를 줄이는 데 활용된다."
-    ),
-    (
-        "💬 감정 분석",
-        "댓글이나 게시글이 긍정적인지 부정적인지 판단하는 인공지능에 활용된다. "
-        "감정 분류 결과가 실제 정답과 가까워지도록 모델을 조정한다."
-    ),
-    (
-        "🚗 자율주행",
-        "주변 차량과 보행자, 도로 상황 등을 인식하는 인공지능 모델의 "
-        "학습 과정에서 예측 오차를 줄이는 데 활용될 수 있다."
-    )
+    ("🖼️ 이미지 인식", "사진 속 사물이나 사람의 특징을 학습하고 이미지를 구별한다."),
+    ("🎙️ 음성 인식", "사람의 음성을 분석하여 말한 내용을 문자로 변환한다."),
+    ("🌐 기계 번역", "문장의 의미와 언어의 패턴을 학습하여 다른 언어로 번역한다."),
+    ("💬 감정 분석", "댓글이나 게시글에 담긴 긍정적·부정적 감정을 분석한다."),
+    ("🚗 자율주행", "주변 차량과 보행자, 도로 등의 정보를 인식하는 모델을 학습한다."),
+    ("🎬 영상 추천", "사용자의 시청 기록과 선호도를 바탕으로 관심 있을 만한 영상을 예측한다.")
 ]
 
 cols = st.columns(3)
 
 for i, (title, description) in enumerate(examples):
     with cols[i % 3]:
-        st.markdown(
-            f"""
-            <div class="example-card">
-                <h3>{title}</h3>
-                <p>{description}</p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+        st.markdown(f"""
+        <div class="example-card">
+            <h3>{title}</h3>
+            <p>{description}</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+st.markdown("""
+<div class="explain-box">
+    <span class="highlight">이번에 자세히 살펴볼 사례</span><br><br>
+    영상 플랫폼의 콘텐츠 추천 알고리즘이다.
+    사용자의 시청 기록과 선호도를 바탕으로 영상을 추천하는 과정에서
+    예측 오차를 줄이는 데 경사하강법이 활용될 수 있다.
+</div>
+""", unsafe_allow_html=True)
 
 
 # -------------------------------
-# 03. 영상 플랫폼 활용 과정
-# -------------------------------
-st.markdown(
-    '<div class="section-number">03 / CONTENT RECOMMENDATION</div>'
-    '<div class="section-title">영상 플랫폼에서는 어떻게 활용될까?</div>',
-    unsafe_allow_html=True
-)
-
-with st.container(border=True):
-    cols = st.columns([2, 0.4, 2, 0.4, 2])
-
-    with cols[0]:
-        st.markdown("**① 사용자 데이터 수집**")
-
-    with cols[1]:
-        st.markdown("### →")
-
-    with cols[2]:
-        st.markdown("**② 관심도 예측**")
-
-    with cols[3]:
-        st.markdown("### →")
-
-    with cols[4]:
-        st.markdown("**③ 실제 반응과 비교**")
-
-
-# -------------------------------
-# 04. 예측 오차
+# 02. 콘텐츠 추천 과정
 # -------------------------------
 st.markdown(
-    '<div class="section-number">04 / PREDICTION ERROR</div>'
-    '<div class="section-title">숫자로 이해하는 예측 오차</div>',
+    '<div class="section-number">02 / RECOMMENDATION</div>'
+    '<div class="section-title">영상 추천 알고리즘은 어떻게 작동할까?</div>',
     unsafe_allow_html=True
 )
 
 st.write(
-    "이해를 돕기 위해 관심도 예측값을 0과 1 사이의 숫자로 나타내는 "
-    "간단한 예시를 살펴보자."
+    "영상 플랫폼은 사용자가 어떤 영상을 시청했는지, "
+    "어떤 영상에 좋아요를 눌렀는지 등의 정보를 활용한다. "
+    "이를 바탕으로 사용자가 어떤 영상에 관심을 가질지 예측한다."
 )
 
-with st.container(border=True):
-    st.subheader("상황")
+steps = [
+    ("STEP 1. 사용자 정보 수집",
+     "시청 기록, 좋아요, 시청 시간, 선호하는 영상 분야 등의 정보를 모은다."),
+    ("STEP 2. 관심도 예측",
+     "수집한 정보를 바탕으로 사용자가 특정 영상에 얼마나 관심을 가질지 예측한다."),
+    ("STEP 3. 실제 반응과 비교",
+     "예측한 결과를 실제 시청이나 클릭 등의 반응과 비교한다."),
+    ("STEP 4. 예측 오차 확인",
+     "예측과 실제 반응 사이에 차이가 얼마나 있는지 확인한다."),
+    ("STEP 5. 모델 학습",
+     "경사하강법 등을 활용하여 예측 오차가 줄어들도록 모델을 조정한다.")
+]
 
-    st.write(
-        "인공지능이 어떤 영상에 대한 사용자의 관심도를 0.3으로 예측했다. "
-        "그런데 사용자는 실제로 해당 영상을 시청했다."
-    )
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.metric("인공지능의 예측값", "0.3")
-
-    with col2:
-        st.metric("실제 반응값", "1.0")
-
-    st.divider()
-
-    st.subheader("① 두 값의 차이 계산")
-
-    st.write(
-        "먼저 실제 반응값에서 예측값을 빼면 두 값의 차이를 구할 수 있다."
-    )
-
-    st.latex(r"1-0.3=0.7")
-
-    st.subheader("② 왜 차이를 제곱할까?")
-
-    st.write(
-        "오차를 단순히 빼기만 하면 음수와 양수가 나타날 수 있다. "
-        "여러 오차를 합칠 때 서로 상쇄되는 문제를 막기 위해 "
-        "제곱하는 방법을 사용할 수 있다."
-    )
-
-    st.write(
-        "또한 오차가 클수록 제곱한 값이 더 커지기 때문에 "
-        "큰 오차를 더욱 크게 반영할 수 있다."
-    )
-
-    st.latex(r"L=(\text{실제값}-\text{예측값})^2")
-
-    st.latex(r"L=(1-0.3)^2=0.49")
-
-    st.markdown(
-        '<p class="highlight">계산된 손실값은 0.49이다.</p>',
-        unsafe_allow_html=True
-    )
-
-    st.write(
-        "이처럼 예측값과 실제 반응값의 차이를 수치로 나타내는 함수를 "
-        "손실함수라고 한다. 여기서는 이해를 위해 제곱 오차를 사용했다."
-    )
-
-    st.caption(
-        "실제 추천 시스템에서는 문제의 종류에 따라 다른 손실함수를 사용하기도 한다."
-    )
+for title, description in steps:
+    st.markdown(f"""
+    <div class="step-card">
+        <b class="highlight">{title}</b>
+        <p>{description}</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 
 # -------------------------------
-# 05. 경사하강법의 수학적 원리
+# 03. 경사하강법 적용 과정
 # -------------------------------
 st.markdown(
-    '<div class="section-number">05 / GRADIENT DESCENT</div>'
-    '<div class="section-title">경사하강법은 이 오차를 어떻게 줄일까?</div>',
+    '<div class="section-number">03 / LEARNING PROCESS</div>'
+    '<div class="section-title">추천 알고리즘에서 경사하강법은 어떤 역할을 할까?</div>',
     unsafe_allow_html=True
 )
 
 st.write(
-    "오차를 계산했다면 다음 단계는 오차가 작아지도록 "
-    "인공지능 모델의 가중치와 편향을 조정하는 것이다. "
-    "이때 미분이 사용된다."
+    "추천 알고리즘이 처음부터 사용자의 관심사를 정확하게 예측하는 것은 아니다. "
+    "처음에는 예측이 실제 반응과 다를 수 있으며, 이러한 차이를 줄이는 학습 과정이 필요하다."
 )
 
+st.markdown("""
+<div class="explain-box">
+    <b>예를 들어 볼까?</b><br><br>
+    어떤 사용자가 특정 영상을 실제로 시청했다고 가정해 보자.<br>
+    추천 모델은 이 사용자가 해당 영상에 관심을 가질 가능성을 예측한다.<br><br>
+    처음에는 예측 결과가 실제 반응과 다를 수 있다.
+    이때 경사하강법을 이용해 모델의 설정값을 조금씩 조정하고,
+    예측 오차를 줄이는 과정을 반복한다.<br><br>
+    이러한 학습이 반복되면 모델은 사용자의 반응에서 패턴을 찾아
+    관심 영상을 더 잘 예측할 수 있게 된다.
+</div>
+""", unsafe_allow_html=True)
 
-# ① 손실함수 미분
-with st.container(border=True):
-    st.subheader("① 손실함수를 미분하기")
+st.markdown("#### 핵심 흐름")
 
-    st.write(
-        "모델의 가중치와 편향에 따라 손실값이 어떻게 달라지는지 알아보기 위해 "
-        "손실함수를 미분한다."
-    )
-
-    st.write(
-        "이해를 돕기 위해 가중치를 w라고 하고, "
-        "앞의 예시를 단순화하여 w 하나만 조정한다고 가정해 보자."
-    )
-
-    st.latex(r"L(w)=(1-w)^2")
-
-    st.write(
-        "실제 반응값은 1이고, 현재 가중치 w를 0.3이라고 가정하면,"
-    )
-
-    st.latex(r"L'(w)=2(w-1)")
-
-    st.write("여기에 현재 값인 w=0.3을 대입하면,")
-
-    st.latex(r"L'(0.3)=2(0.3-1)=-1.4")
-
-    st.markdown(
-        '<p class="highlight">미분값은 -1.4이다.</p>',
-        unsafe_allow_html=True
-    )
-
-    st.write(
-        "미분값이 음수이므로 현재 가중치를 증가시키는 방향으로 이동하면 "
-        "손실값이 감소하는 방향이 된다."
-    )
-
-
-# ② 이동 방향 확인
-with st.container(border=True):
-    st.subheader("② 미분값으로 이동 방향 확인하기")
-
-    st.write(
-        "미분값의 부호를 통해 손실값이 작아지는 방향을 판단할 수 있다."
-    )
-
-    st.markdown("""
-    - 미분값이 양수라면 가중치를 줄이는 방향으로 이동한다.
-    - 미분값이 음수라면 가중치를 늘리는 방향으로 이동한다.
-    """)
-
-    st.write(
-        "따라서 앞의 예시처럼 미분값이 -1.4라면 "
-        "가중치를 증가시키는 방향으로 조정해야 한다."
-    )
-
-
-# ③ 학습률을 이용한 조정
-with st.container(border=True):
-    st.subheader("③ 학습률을 이용해 가중치 조정하기")
-
-    st.write(
-        "가중치를 얼마나 바꿀지는 학습률에 따라 달라진다. "
-        "학습률은 한 번에 이동하는 크기를 조절하는 값이다."
-    )
-
-    st.write(
-        "경사하강법의 가중치 조정 과정을 식으로 나타내면 다음과 같다."
-    )
-
-    st.latex(
-        r"\text{새로운 가중치}"
-        r"=\text{기존 가중치}-\text{학습률}\times\text{미분값}"
-    )
-
-    st.write("앞의 예시에서 학습률을 0.1이라고 가정해 보자.")
-
-    st.latex(r"w_{\text{새로운 값}}=0.3-0.1\times(-1.4)")
-
-    st.latex(r"w_{\text{새로운 값}}=0.44")
-
-    st.markdown(
-        '<p class="highlight">가중치가 0.3에서 0.44로 바뀌었다.</p>',
-        unsafe_allow_html=True
-    )
-
-    st.write(
-        "미분값이 음수였기 때문에 마이너스와 음수가 만나 "
-        "가중치가 증가한 것이다. "
-        "이처럼 미분값의 반대 방향으로 이동해 "
-        "손실값이 작아지는 방향을 찾는다."
-    )
-
-
-# ④ 반복 학습
-with st.container(border=True):
-    st.subheader("④ 다시 오차를 계산하고 반복하기")
-
-    st.write(
-        "가중치가 0.44로 바뀌었다고 가정하고 새로운 손실값을 계산하면 다음과 같다."
-    )
-
-    st.latex(r"L=(1-0.44)^2=0.3136")
-
-    st.write(
-        "처음 손실값은 0.49였지만, 가중치를 조정한 후에는 0.3136으로 줄어들었다."
-    )
-
-    st.markdown(
-        '<p class="highlight">0.49 → 0.3136으로 손실값이 감소했다!</p>',
-        unsafe_allow_html=True
-    )
-
-    st.write(
-        "실제 학습에서는 이처럼 가중치와 편향을 조정하고 손실값을 다시 계산하는 "
-        "과정을 여러 번 반복한다. 이를 통해 모델의 예측 오차를 줄여 나간다."
-    )
+st.markdown("""
+<div class="step-card">
+    <b>예측</b>
+    <p>사용자가 어떤 영상에 관심을 가질지 예측한다.</p>
+</div>
+<div class="step-card">
+    <b>비교</b>
+    <p>예측 결과와 실제 반응을 비교하여 차이를 확인한다.</p>
+</div>
+<div class="step-card">
+    <b>조정</b>
+    <p>경사하강법을 활용하여 모델의 설정값을 조정한다.</p>
+</div>
+<div class="step-card">
+    <b>반복 학습</b>
+    <p>이 과정을 반복하면서 예측 오차를 줄여 나간다.</p>
+</div>
+""", unsafe_allow_html=True)
 
 
 # -------------------------------
-# 핵심 정리
-# -------------------------------
-with st.container(border=True):
-    st.markdown(
-        '<p class="highlight">핵심 정리</p>',
-        unsafe_allow_html=True
-    )
-
-    st.write(
-        "경사하강법은 손실함수를 미분해 오차가 작아지는 방향을 찾고, "
-        "학습률을 이용해 모델의 가중치와 편향을 조금씩 조정하는 방법이다. "
-        "이 과정을 반복하면서 인공지능 모델의 예측 성능을 개선한다."
-    )
-
-
-# -------------------------------
-# 06. 느낀점
+# 04. 느낀점
 # -------------------------------
 st.markdown(
-    '<div class="section-number">06 / REFLECTION</div>'
+    '<div class="section-number">04 / REFLECTION</div>'
     '<div class="section-title">느낀점</div>',
     unsafe_allow_html=True
 )
 
-with st.container(border=True):
-    st.write(
-        "경사하강법이 이미지 인식, 음성 인식, 콘텐츠 추천 등 "
-        "다양한 인공지능 기술의 학습 과정에 활용된다는 점을 알게 되었다. "
-        "특히 영상 플랫폼의 콘텐츠 추천 과정을 수학적으로 살펴보면서, "
-        "예측값과 실제 반응의 차이를 손실함수로 나타내고 "
-        "이를 미분해 모델의 가중치를 조정한다는 점을 이해할 수 있었다. "
-        "수학 시간에 배운 미분이 단순한 계산을 넘어 "
-        "인공지능이 스스로 학습하고 예측 결과를 개선하는 과정에 "
-        "활용된다는 점이 인상 깊었다."
-    )
+st.markdown("""
+<div class="explain-box">
+    경사하강법을 여러 인공지능 기술의 활용 사례와 연결해 살펴보면서,
+    수학에서 배우는 미분이 실제 인공지능의 학습 과정에도 활용된다는 점을 알게 되었다.
+    특히 영상 추천 알고리즘은 사용자의 반응을 예측하고 그 오차를 줄이는 과정을
+    반복한다는 점이 흥미로웠다. 처음에는 수학적인 계산 방법이라고만 생각했던
+    경사하강법이 인공지능의 예측 성능을 개선하는 데 중요한 역할을 한다는 것을
+    이해할 수 있었다.
+</div>
+""", unsafe_allow_html=True)
+
+
+# -------------------------------
+# 참고 자료
+# -------------------------------
+st.markdown("---")
+st.markdown("### 참고 자료")
+
+st.markdown("""
+- Goodfellow et al., *Deep Learning*, Applications
+- *Machine Learning: Algorithms, Real-World Applications and Research Directions*
+- Microsoft Research, *Applications of Machine Learning*
+""")
+
+st.caption("※ 실제 추천 시스템은 서비스에 따라 사용하는 학습 방식과 알고리즘이 다를 수 있다.")
