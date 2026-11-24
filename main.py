@@ -151,7 +151,7 @@ if st.session_state.page == 0:
     )
 
     st.markdown(
-        '<div class="subtitle">미분으로 이해하는 인공지능의 최적화 원리</div>',
+        '<div class="subtitle">20107 김태희</div>',
         unsafe_allow_html=True
     )
 
