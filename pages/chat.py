@@ -23,7 +23,7 @@ st.markdown("""
     max-width: 1100px;
 }
 
-h1, h2, h3, p, li {
+h1, h2, h3, p, li, label {
     color: white;
 }
 
@@ -57,7 +57,7 @@ h1, h2, h3, p, li {
     border: 1px solid #333333;
     border-radius: 13px;
     padding: 22px;
-    min-height: 175px;
+    min-height: 190px;
     margin-bottom: 12px;
 }
 
@@ -125,7 +125,7 @@ st.markdown(
 
 
 # -------------------------------
-# 01. 경사하강법 활용 사례
+# 01. 활용 사례
 # -------------------------------
 st.markdown(
     '<div class="section-number">01 / APPLICATION</div>'
@@ -135,8 +135,7 @@ st.markdown(
 
 st.write(
     "경사하강법은 다양한 인공지능 모델을 학습시키는 과정에서 "
-    "예측 오차를 줄이는 데 활용된다. "
-    "대표적인 활용 사례를 살펴보자."
+    "예측 오차를 줄이는 데 활용된다. 대표적인 활용 사례를 살펴보자."
 )
 
 examples = [
@@ -149,7 +148,7 @@ examples = [
     (
         "🎙️ 음성 인식",
         "사람의 음성을 문자로 변환하는 기술에 활용된다. "
-        "음성을 분석해 문장을 예측하고, 실제 문장과의 차이를 줄이도록 학습한다."
+        "음성을 분석해 문장을 예측하고 실제 문장과의 차이를 줄이도록 학습한다."
     ),
     (
         "🌐 기계 번역",
@@ -177,12 +176,15 @@ cols = st.columns(3)
 
 for i, (title, description) in enumerate(examples):
     with cols[i % 3]:
-        st.markdown(f"""
-        <div class="example-card">
-            <h3>{title}</h3>
-            <p>{description}</p>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown(
+            f"""
+            <div class="example-card">
+                <h3>{title}</h3>
+                <p>{description}</p>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
 
 # -------------------------------
@@ -202,7 +204,6 @@ st.markdown("""
 <div class="explain-box">
     영상 플랫폼은 사용자의 시청 기록, 좋아요, 시청 시간,
     자주 보는 영상의 분야 등을 분석한다.<br><br>
-
     이러한 정보를 바탕으로 사용자가 어떤 영상에 관심을 가질지 예측한다.
     이때 인공지능 모델이 실제 사용자의 반응을 정확하게 예측하도록
     학습시키는 과정에서 경사하강법이 활용될 수 있다.
@@ -210,9 +211,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# -------------------------------
 # 추천 알고리즘의 학습 과정
-# -------------------------------
 st.markdown("### 콘텐츠 추천 모델의 학습 과정")
 
 steps = [
@@ -239,21 +238,22 @@ steps = [
 ]
 
 for title, description in steps:
-    st.markdown(f"""
-    <div class="step-card">
-        <b class="highlight">{title}</b>
-        <p>{description}</p>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        f"""
+        <div class="step-card">
+            <b class="highlight">{title}</b>
+            <p>{description}</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 
 # -------------------------------
-
-# -------------------------------
-# 03. 실제 적용의 의미
+# 03. 반복 학습의 변화
 # -------------------------------
 st.markdown(
-    '<div class="section-number">03 / WHY IT MATTERS</div>'
+    '<div class="section-number">03 / LEARNING PROCESS</div>'
     '<div class="section-title">반복 학습은 어떤 변화를 만들까?</div>',
     unsafe_allow_html=True
 )
@@ -264,31 +264,20 @@ st.write(
     "그 차이를 줄이는 방향으로 여러 번 조정된다."
 )
 
-# 학습 전
-with st.container(border=True):
-    st.markdown("### 학습 전")
-    st.write(
-        "사용자가 어떤 영상에 관심을 가질지 "
-        "정확하게 예측하지 못할 수 있다."
-    )
+st.markdown("""
+<div class="explain-box">
+    <h3>학습 전</h3>
+    사용자가 어떤 영상에 관심을 가질지 정확하게 예측하지 못할 수 있다.
+    <br><br>
+    <h3>학습 과정</h3>
+    실제 반응과 예측 결과를 비교하고, 경사하강법으로 모델을 반복해서 조정한다.
+    <br><br>
+    <h3>학습 후</h3>
+    학습 과정에서 발견한 패턴을 바탕으로 사용자가 관심을 가질 만한 콘텐츠를
+    더 잘 예측할 수 있게 된다.
+</div>
+""", unsafe_allow_html=True)
 
-    st.divider()
-
-    st.markdown("### 학습 과정")
-    st.write(
-        "실제 반응과 예측 결과를 비교하고, "
-        "경사하강법으로 모델의 설정값을 반복해서 조정한다."
-    )
-
-    st.divider()
-
-    st.markdown("### 학습 후")
-    st.write(
-        "학습 과정에서 발견한 패턴을 바탕으로 "
-        "사용자가 관심을 가질 만한 콘텐츠를 더 잘 예측할 수 있게 된다."
-    )
-
-# 핵심 정리
 st.markdown("""
 <div class="explain-box">
     <span class="highlight">핵심 정리</span><br><br>
@@ -297,6 +286,7 @@ st.markdown("""
     추천 모델을 학습시키는 데 활용되는 방법이다.
 </div>
 """, unsafe_allow_html=True)
+
 
 # -------------------------------
 # 04. 느낀점
