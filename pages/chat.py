@@ -82,7 +82,6 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     border-radius: 12px;
     background-color: #202020;
 }
-
 </style>
 """, unsafe_allow_html=True)
 
@@ -172,43 +171,28 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.markdown("""
-<div style="
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 18px;
-    background-color: #202020;
-    border: 1px solid #393939;
-    border-radius: 14px;
-    padding: 35px 20px;
-    flex-wrap: wrap;
-">
-    <div style="font-size: 21px; font-weight: bold;">
-        ① 사용자 데이터 수집
-    </div>
+# HTML 대신 Streamlit columns 사용
+with st.container(border=True):
+    cols = st.columns([2, 0.4, 2, 0.4, 2])
 
-    <div style="color: #ff625e; font-size: 28px;">
-        →
-    </div>
+    with cols[0]:
+        st.markdown("**① 사용자 데이터 수집**")
 
-    <div style="font-size: 21px; font-weight: bold;">
-        ② 관심도 예측
-    </div>
+    with cols[1]:
+        st.markdown("### →")
 
-    <div style="color: #ff625e; font-size: 28px;">
-        →
-    </div>
+    with cols[2]:
+        st.markdown("**② 관심도 예측**")
 
-    <div style="font-size: 21px; font-weight: bold;">
-        ③ 실제 반응과 비교
-    </div>
-</div>
-""", unsafe_allow_html=True)
+    with cols[3]:
+        st.markdown("### →")
+
+    with cols[4]:
+        st.markdown("**③ 실제 반응과 비교**")
 
 
 # -------------------------------
-# 숫자로 이해하는 예측 오차
+# 03. 예측 오차
 # -------------------------------
 st.markdown(
     '<div class="section-number">03 / PREDICTION ERROR</div>'
@@ -290,9 +274,9 @@ st.markdown(
 
 st.write(
     "오차를 계산했다면 다음 단계는 오차가 작아지도록 "
-    "인공지능 모델의 설정값을 조정하는 것이다. "
-    "이때 미분이 사용된다."
+    "인공지능 모델의 설정값을 조정하는 것이다. 이때 미분이 사용된다."
 )
+
 
 # ① 손실함수 미분
 with st.container(border=True):
@@ -371,9 +355,7 @@ with st.container(border=True):
         r"=\text{기존 값}-\text{학습률}\times\text{미분값}"
     )
 
-    st.write(
-        "앞의 예시에서 학습률을 0.1이라고 가정해 보자."
-    )
+    st.write("앞의 예시에서 학습률을 0.1이라고 가정해 보자.")
 
     st.latex(r"w_{\text{새로운 값}}=0.3-0.1\times(-1.4)")
 
