@@ -1,16 +1,14 @@
 
 import streamlit as st
-import numpy as np
-import matplotlib.pyplot as plt
 
 st.set_page_config(
-    page_title="경사하강법 소개",
-    page_icon="📉",
+    page_title="경사하강법의 실제 활용",
+    page_icon="📌",
     layout="wide"
 )
 
 # -------------------------------
-# 디자인 설정
+# 디자인
 # -------------------------------
 st.markdown("""
 <style>
@@ -20,651 +18,475 @@ st.markdown("""
 }
 
 .block-container {
-    max-width: 1100px;
     padding-top: 3rem;
-    padding-bottom: 3rem;
+    padding-bottom: 4rem;
+    max-width: 1100px;
+}
+
+h1, h2, h3, p, label {
+    color: white;
 }
 
 .main-title {
-    font-size: 58px;
-    font-weight: 900;
-    margin-bottom: 35px;
-    letter-spacing: -2px;
-    color: white;
+    font-size: 42px;
+    font-weight: 800;
+    margin-bottom: 10px;
 }
 
-.subtitle {
-    font-size: 23px;
+.sub-title {
     color: #aaaaaa;
-    margin-bottom: 55px;
-}
-
-.line {
-    border-top: 2px solid #777777;
-    margin-top: 35px;
-    margin-bottom: 65px;
-}
-
-.contents-title {
-    font-size: 34px;
-    font-weight: bold;
-    margin-bottom: 28px;
-    color: white;
+    font-size: 20px;
+    margin-bottom: 45px;
 }
 
 .section-title {
-    font-size: 38px;
-    font-weight: bold;
-    margin-bottom: 30px;
-    color: white;
-}
-
-.page-label {
-    color: #ff625e;
-    font-size: 18px;
-    font-weight: bold;
-    letter-spacing: 4px;
-    margin-bottom: 25px;
-}
-
-.content-box {
-    background-color: #202020;
-    border: 1px solid #444444;
-    border-radius: 15px;
-    padding: 28px;
+    font-size: 30px;
+    font-weight: 750;
+    margin-top: 55px;
     margin-bottom: 20px;
+}
+
+.section-number {
+    color: #ff625e;
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.example-card {
+    background-color: #1d1d1d;
+    border: 1px solid #333333;
+    border-radius: 13px;
+    padding: 22px;
+    min-height: 190px;
+    margin-bottom: 12px;
+}
+
+.example-card h3 {
+    font-size: 22px;
+    margin-bottom: 12px;
+}
+
+.example-card p {
+    color: #bbbbbb;
     font-size: 18px;
     line-height: 1.8;
-    color: white;
 }
 
-.point {
+.highlight {
     color: #ff625e;
     font-weight: bold;
 }
 
-.formula-box {
-    background-color: #252525;
-    border: 1px solid #555555;
-    border-radius: 15px;
-    padding: 25px;
-    margin: 25px 0;
-}
-
-div.stButton > button {
+div[data-testid="stVerticalBlockBorderWrapper"] {
+    border-color: #393939;
+    border-radius: 12px;
     background-color: #202020;
-    color: white;
-    border: 1px solid #444444;
-    border-radius: 20px;
-    width: 100%;
-    height: 150px;
-    text-align: left;
-    padding: 20px;
-    font-size: 20px;
-    font-weight: bold;
-    transition: 0.2s;
 }
 
-div.stButton > button:hover {
-    background-color: #333333;
-    border: 1px solid #ff625e;
-    color: white;
+.stMarkdown p, .stMarkdown li {
+    font-size: 19px;
+    line-height: 1.9;
 }
 
-div.stButton > button:focus {
-    color: white;
-    border: 1px solid #ff625e;
-}
-
-.back-button div.stButton > button {
-    height: 55px;
-    text-align: center;
-    background-color: #303030;
-    font-size: 16px;
-}
-
-/* 실험 결과 글씨 색상 */
-div[data-testid="stMetricLabel"],
-div[data-testid="stMetricLabel"] p {
-    color: #bbbbbb !important;
-}
-
-div[data-testid="stMetricValue"],
-div[data-testid="stMetricValue"] div {
-    color: white !important;
+.stCaption {
+    font-size: 15px;
 }
 </style>
 """, unsafe_allow_html=True)
 
 
 # -------------------------------
-# 화면 이동 상태
+# 제목
 # -------------------------------
-if "page" not in st.session_state:
-    st.session_state.page = 0
+st.markdown(
+    '<div class="main-title">경사하강법의 실제 활용</div>',
+    unsafe_allow_html=True
+)
 
-contents = [
-    "경사하강법이란?",
-    "미분의 역할",
-    "미분값과 학습률",
-    "경사하강법의 수식",
-    "경사하강법의 작동 과정"
-]
+st.markdown(
+    '<div class="sub-title">다양한 인공지능 기술 속 경사하강법</div>',
+    unsafe_allow_html=True
+)
 
 
 # -------------------------------
-# 첫 화면
+# 01. 경사하강법이란?
 # -------------------------------
-if st.session_state.page == 0:
+st.markdown(
+    '<div class="section-number">01 / CONCEPT</div>'
+    '<div class="section-title">경사하강법이란?</div>',
+    unsafe_allow_html=True
+)
 
-    st.markdown(
-        '<div class="main-title">경사하강법 소개</div>',
-        unsafe_allow_html=True
+with st.container(border=True):
+    st.write(
+        "인공지능은 데이터를 바탕으로 결과를 예측하고, "
+        "예측 결과와 실제 결과의 차이를 줄이는 과정을 통해 학습한다."
     )
 
-    st.markdown(
-        '<div class="subtitle">미분으로 이해하는 인공지능의 최적화 원리</div>',
-        unsafe_allow_html=True
-    )
-
-    st.markdown('<div class="line"></div>', unsafe_allow_html=True)
-
-    st.markdown(
-        '<div class="contents-title">목차</div>',
-        unsafe_allow_html=True
-    )
-
-    cols = st.columns(3)
-
-    for i in range(3):
-        with cols[i]:
-            if st.button(
-                f"{i+1:02d}\n\n{contents[i]}",
-                key=f"menu_{i+1}"
-            ):
-                st.session_state.page = i + 1
-                st.rerun()
-
-    cols = st.columns(3)
-
-    for i in range(3, 5):
-        with cols[i-3]:
-            if st.button(
-                f"{i+1:02d}\n\n{contents[i]}",
-                key=f"menu_{i+1}"
-            ):
-                st.session_state.page = i + 1
-                st.rerun()
-
-    # -------------------------------
-    # 직접 실험해 보기
-    # -------------------------------
-    st.markdown('<div class="line"></div>', unsafe_allow_html=True)
-
-    st.markdown(
-        '<div class="section-title">직접 실험해 보기</div>',
-        unsafe_allow_html=True
+    st.write(
+        "이때 인공지능 모델은 예측에 영향을 주는 "
+        "**가중치(Weight)**와 **편향(Bias)**이라는 값을 사용한다."
     )
 
     st.markdown("""
-    시작 위치와 학습률, 반복 횟수를 직접 바꾸면서
-    경사하강법이 최솟값을 찾아가는 과정을 확인해 보자.
+    - **가중치:** 입력된 정보가 예측 결과에 얼마나 큰 영향을 미치는지 나타내는 값
+    - **편향:** 예측 결과를 조정하는 데 사용되는 값
     """)
 
-    st.markdown("### 실험 조건 설정")
+    st.write(
+        "인공지능은 예측 결과와 실제 결과의 차이를 "
+        "**손실함수**로 계산한다. 손실함수의 값이 작을수록 "
+        "예측 결과가 실제 결과에 가까워진다."
+    )
 
-    col1, col2, col3 = st.columns(3)
+    st.write(
+        "경사하강법은 손실함수를 미분하여 손실값이 작아지는 방향을 찾고, "
+        "가중치와 편향을 조금씩 조정하는 방법이다."
+    )
 
-    with col1:
-        start_x = st.slider(
-            "시작 위치",
-            min_value=-2.0,
-            max_value=10.0,
-            value=0.0,
-            step=0.5
+    st.latex(
+        r"\text{새로운 값}"
+        r"=\text{기존 값}"
+        r"-\text{학습률}\times\text{미분값}"
+    )
+
+    st.write(
+        "여기서 학습률은 한 번에 값을 얼마나 조정할지 정하는 값이다. "
+        "이 과정을 반복하여 손실함수를 최소화하고 "
+        "인공지능 모델의 예측 성능을 개선한다."
+    )
+
+
+# -------------------------------
+# 02. 활용 사례
+# -------------------------------
+st.markdown(
+    '<div class="section-number">02 / APPLICATION</div>'
+    '<div class="section-title">경사하강법은 어디에 활용될까?</div>',
+    unsafe_allow_html=True
+)
+
+st.write(
+    "경사하강법은 인공지능 모델을 학습시키는 과정에서 "
+    "예측 오차를 줄이는 데 활용된다. 다양한 활용 사례를 살펴보자."
+)
+
+examples = [
+    (
+        "🖼️ 이미지 인식",
+        "고양이와 강아지 사진을 구별하는 인공지능을 학습시킬 때 활용된다. "
+        "이미지를 잘못 분류한 결과를 줄이도록 모델을 조정한다."
+    ),
+    (
+        "🎙️ 음성 인식",
+        "사람의 음성을 문자로 변환하는 기술에 활용된다. "
+        "예측한 문장과 실제 문장의 차이를 줄이도록 학습한다."
+    ),
+    (
+        "🌐 기계 번역",
+        "한 언어의 문장을 다른 언어로 번역하는 인공지능에 활용된다. "
+        "번역 결과가 정답 문장에 가까워지도록 모델을 학습시킨다."
+    ),
+    (
+        "🎬 콘텐츠 추천",
+        "사용자의 시청 기록과 선호도를 바탕으로 관심 있을 만한 영상을 예측한다. "
+        "예측 결과와 실제 반응의 차이를 줄이는 데 활용된다."
+    ),
+    (
+        "💬 감정 분석",
+        "댓글이나 게시글이 긍정적인지 부정적인지 판단하는 인공지능에 활용된다. "
+        "감정 분류 결과가 실제 정답과 가까워지도록 모델을 조정한다."
+    ),
+    (
+        "🚗 자율주행",
+        "주변 차량과 보행자, 도로 상황 등을 인식하는 인공지능 모델의 "
+        "학습 과정에서 예측 오차를 줄이는 데 활용될 수 있다."
+    )
+]
+
+cols = st.columns(3)
+
+for i, (title, description) in enumerate(examples):
+    with cols[i % 3]:
+        st.markdown(
+            f"""
+            <div class="example-card">
+                <h3>{title}</h3>
+                <p>{description}</p>
+            </div>
+            """,
+            unsafe_allow_html=True
         )
 
-    with col2:
-        learning_rate = st.slider(
-            "학습률",
-            min_value=0.01,
-            max_value=0.9,
-            value=0.25,
-            step=0.01
-        )
 
-    with col3:
-        iterations = st.slider(
-            "반복 횟수",
-            min_value=1,
-            max_value=20,
-            value=5,
-            step=1
-        )
+# -------------------------------
+# 03. 영상 플랫폼 활용 과정
+# -------------------------------
+st.markdown(
+    '<div class="section-number">03 / CONTENT RECOMMENDATION</div>'
+    '<div class="section-title">영상 플랫폼에서는 어떻게 활용될까?</div>',
+    unsafe_allow_html=True
+)
 
-    # -------------------------------
-    # 함수와 미분함수
-    # -------------------------------
-    def f(x):
-        return (x - 4) ** 2
+with st.container(border=True):
+    cols = st.columns([2, 0.4, 2, 0.4, 2])
 
-    def derivative(x):
-        return 2 * (x - 4)
+    with cols[0]:
+        st.markdown("**① 사용자 데이터 수집**")
 
-    # -------------------------------
-    # 경사하강법 계산
-    # -------------------------------
-    positions = [start_x]
+    with cols[1]:
+        st.markdown("### →")
 
-    current_x = start_x
+    with cols[2]:
+        st.markdown("**② 관심도 예측**")
 
-    for i in range(iterations):
-        next_x = current_x - learning_rate * derivative(current_x)
+    with cols[3]:
+        st.markdown("### →")
 
-        positions.append(next_x)
-        current_x = next_x
+    with cols[4]:
+        st.markdown("**③ 실제 반응과 비교**")
 
-    losses = [f(x) for x in positions]
 
-    # -------------------------------
-    # 그래프 그리기
-    # -------------------------------
-    st.markdown("### 경사하강법 그래프")
+# -------------------------------
+# 04. 예측 오차
+# -------------------------------
+st.markdown(
+    '<div class="section-number">04 / PREDICTION ERROR</div>'
+    '<div class="section-title">숫자로 이해하는 예측 오차</div>',
+    unsafe_allow_html=True
+)
 
-    x_values = np.linspace(-4, 12, 400)
-    y_values = f(x_values)
+st.write(
+    "이해를 돕기 위해 관심도 예측값을 0과 1 사이의 숫자로 나타내는 "
+    "간단한 예시를 살펴보자."
+)
 
-    fig, ax = plt.subplots(figsize=(11, 6))
+with st.container(border=True):
+    st.subheader("상황")
 
-    fig.patch.set_facecolor("#101010")
-    ax.set_facecolor("#101010")
-
-    # 손실함수 곡선
-    ax.plot(
-        x_values,
-        y_values,
-        color="#dddddd",
-        linewidth=2.5,
-        label="Loss function"
+    st.write(
+        "인공지능이 어떤 영상에 대한 사용자의 관심도를 0.3으로 예측했다. "
+        "그런데 사용자는 실제로 해당 영상을 시청했다."
     )
-
-    # 최솟값 위치
-    ax.axvline(
-        x=4,
-        color="#ff625e",
-        linestyle="--",
-        linewidth=2,
-        label="Minimum (x=4)"
-    )
-
-    # 경사하강법 이동 경로
-    ax.plot(
-        positions,
-        losses,
-        color="#55aaff",
-        marker="o",
-        markersize=7,
-        linewidth=2,
-        label="Gradient descent path"
-    )
-
-    # 시작 위치
-    ax.scatter(
-        positions[0],
-        losses[0],
-        color="#ffcc66",
-        s=110,
-        zorder=5,
-        label="Start"
-    )
-
-    # 최종 위치
-    ax.scatter(
-        positions[-1],
-        losses[-1],
-        color="#55dd99",
-        s=110,
-        zorder=5,
-        label="Final position"
-    )
-
-    # 축 이름
-    ax.set_xlabel(
-        "x (Position)",
-        color="white",
-        fontsize=13
-    )
-
-    ax.set_ylabel(
-        "f(x) (Loss)",
-        color="white",
-        fontsize=13
-    )
-
-    # 눈금과 격자
-    ax.tick_params(
-        colors="white",
-        labelsize=11
-    )
-
-    ax.grid(
-        color="#555555",
-        alpha=0.3
-    )
-
-    for spine in ax.spines.values():
-        spine.set_color("#777777")
-
-    # 범례
-    ax.legend(
-        facecolor="#202020",
-        edgecolor="#555555",
-        labelcolor="white",
-        fontsize=10
-    )
-
-    ax.set_xlim(-4, 12)
-    ax.set_ylim(bottom=0)
-
-    st.pyplot(fig, use_container_width=True)
-    plt.close(fig)
-
-    # -------------------------------
-    # 그래프 설명
-    # -------------------------------
-    st.markdown("""
-    <div class="content-box">
-    <span class="point">그래프 읽는 방법</span><br>
-    • 흰색 곡선: 손실함수의 모양<br>
-    • 빨간색 점선: 최솟값이 위치한 x=4 지점<br>
-    • 파란색 선과 점: 경사하강법이 이동한 과정<br>
-    • 노란색 점: 처음 출발한 위치<br>
-    • 초록색 점: 반복 후 도달한 위치
-    </div>
-    """, unsafe_allow_html=True)
-
-    # -------------------------------
-    # 실험 결과
-    # -------------------------------
-    st.markdown("### 실험 결과")
 
     col1, col2 = st.columns(2)
 
     with col1:
-        st.metric(
-            "최종 위치",
-            f"{positions[-1]:.4f}"
-        )
+        st.metric("인공지능의 예측값", "0.3")
 
     with col2:
-        st.metric(
-            "최종 손실함수 값",
-            f"{losses[-1]:.4f}"
-        )
+        st.metric("실제 반응값", "1.0")
 
-    st.markdown("### 반복 과정 확인")
+    st.divider()
 
-    result_data = {
-        "반복 횟수": list(range(iterations + 1)),
-        "현재 위치": [round(x, 4) for x in positions],
-        "손실함수 값": [round(y, 4) for y in losses]
-    }
+    st.subheader("① 두 값의 차이 계산")
 
-    st.dataframe(
-        result_data,
-        use_container_width=True,
-        hide_index=True
+    st.write(
+        "먼저 실제 반응값에서 예측값을 빼면 두 값의 차이를 구할 수 있다."
     )
 
+    st.latex(r"1-0.3=0.7")
 
-# -------------------------------
-# 각 내용 화면
-# -------------------------------
-else:
+    st.subheader("② 왜 차이를 제곱할까?")
 
-    page = st.session_state.page
+    st.write(
+        "오차를 단순히 빼기만 하면 음수와 양수가 나타날 수 있다. "
+        "여러 오차를 합칠 때 서로 상쇄되는 문제를 막기 위해 "
+        "제곱하는 방법을 사용할 수 있다."
+    )
 
-    st.markdown('<div class="back-button">', unsafe_allow_html=True)
+    st.write(
+        "또한 오차가 클수록 제곱한 값이 더 커지기 때문에 "
+        "큰 오차를 더욱 크게 반영할 수 있다."
+    )
 
-    if st.button("← 처음 화면으로", key="back"):
-        st.session_state.page = 0
-        st.rerun()
+    st.latex(r"L=(\text{실제값}-\text{예측값})^2")
 
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.latex(r"L=(1-0.3)^2=0.49")
 
     st.markdown(
-        f'<div class="page-label">{page:02d} / 05</div>',
+        '<p class="highlight">계산된 손실값은 0.49이다.</p>',
         unsafe_allow_html=True
     )
 
-    # ---------------------------
-    # 1. 경사하강법이란?
-    # ---------------------------
-    if page == 1:
+    st.write(
+        "이처럼 예측값과 실제 반응값의 차이를 수치로 나타내는 함수를 "
+        "손실함수라고 한다. 여기서는 이해를 위해 제곱 오차를 사용했다."
+    )
 
-        st.markdown(
-            '<div class="section-title">경사하강법이란?</div>',
-            unsafe_allow_html=True
-        )
+    st.caption(
+        "실제 추천 시스템에서는 문제의 종류에 따라 다른 손실함수를 사용하기도 한다."
+    )
 
-        st.markdown("""
-        <div class="content-box">
-        경사하강법은 <span class="point">미분을 활용하여 함수의 최솟값을 찾아가는 최적화 알고리즘</span>이다.
-        </div>
-        """, unsafe_allow_html=True)
 
-        st.markdown("""
-        함수의 최솟값을 찾으려면 현재 위치에서 함수의 값이 작아지는 방향을 알아야 한다.
+# -------------------------------
+# 05. 경사하강법의 수학적 원리
+# -------------------------------
+st.markdown(
+    '<div class="section-number">05 / GRADIENT DESCENT</div>'
+    '<div class="section-title">경사하강법은 이 오차를 어떻게 줄일까?</div>',
+    unsafe_allow_html=True
+)
 
-        경사하강법은 이때 미분을 이용한다. 현재 위치에서의 미분값을 확인하고, 함수의 값이 작아지는 방향으로 조금씩 이동하는 과정을 반복한다.
-        """)
+st.write(
+    "오차를 계산했다면 다음 단계는 오차가 작아지도록 "
+    "인공지능 모델의 가중치와 편향을 조정하는 것이다. "
+    "이때 미분이 사용된다."
+)
 
-        st.markdown("### 손실함수란?")
 
-        st.markdown("""
-        인공지능이 예측한 값과 실제 값 사이의 차이를 수학적으로 나타낸 함수를 손실함수라고 한다.
+# ① 손실함수 미분
+with st.container(border=True):
+    st.subheader("① 손실함수를 미분하기")
 
-        경사하강법은 이 손실함수의 값을 줄이는 방향으로 이동하여 최솟값을 찾는다.
-        """)
+    st.write(
+        "모델의 가중치와 편향에 따라 손실값이 어떻게 달라지는지 알아보기 위해 "
+        "손실함수를 미분한다."
+    )
 
-        st.markdown("""
-        **경사하강법의 핵심 과정**
+    st.write(
+        "이해를 돕기 위해 가중치를 w라고 하고, "
+        "앞의 예시를 단순화하여 w 하나만 조정한다고 가정해 보자."
+    )
 
-        1. 현재 위치를 정한다.
-        2. 현재 위치에서 미분값을 구한다.
-        3. 함수의 값이 작아지는 방향으로 이동한다.
-        4. 이 과정을 반복하여 최솟값에 가까워진다.
-        """)
+    st.latex(r"L(w)=(1-w)^2")
 
-    # ---------------------------
-    # 2. 미분의 역할
-    # ---------------------------
-    elif page == 2:
+    st.write(
+        "실제 반응값은 1이고, 현재 가중치 w를 0.3이라고 가정하면,"
+    )
 
-        st.markdown(
-            '<div class="section-title">미분의 역할</div>',
-            unsafe_allow_html=True
-        )
+    st.latex(r"L'(w)=2(w-1)")
 
-        st.markdown("""
-        <div class="content-box">
-        미분은 특정 지점에서 함수가 얼마나 빠르게 변하는지 나타내는
-        <span class="point">순간변화율</span>이다.
-        </div>
-        """, unsafe_allow_html=True)
+    st.write("여기에 현재 값인 w=0.3을 대입하면,")
 
-        st.markdown("### 미분은 왜 필요할까?")
+    st.latex(r"L'(0.3)=2(0.3-1)=-1.4")
 
-        st.markdown("""
-        경사하강법에서는 현재 위치의 미분값을 확인하고,
-        그 부호에 따라 함수의 값이 작아지는 방향으로 이동한다.
-        """)
+    st.markdown(
+        '<p class="highlight">미분값은 -1.4이다.</p>',
+        unsafe_allow_html=True
+    )
 
-        st.markdown("### 미분값에 따라 이동 방향은 달라진다.")
+    st.write(
+        "미분값이 음수이므로 현재 가중치를 증가시키는 방향으로 이동하면 "
+        "손실값이 감소하는 방향이 된다."
+    )
 
-        col1, col2 = st.columns(2)
 
-        with col1:
-            st.markdown("""
-            <div class="content-box">
-            <h3>미분값이 양수일 때</h3>
-            오른쪽으로 갈수록 함수의 값이 커지므로
-            <span class="point">왼쪽 방향</span>으로 이동한다.
-            </div>
-            """, unsafe_allow_html=True)
+# ② 이동 방향 확인
+with st.container(border=True):
+    st.subheader("② 미분값으로 이동 방향 확인하기")
 
-        with col2:
-            st.markdown("""
-            <div class="content-box">
-            <h3>미분값이 음수일 때</h3>
-            오른쪽으로 갈수록 함수의 값이 작아지므로
-            <span class="point">오른쪽 방향</span>으로 이동한다.
-            </div>
-            """, unsafe_allow_html=True)
+    st.write(
+        "미분값의 부호를 통해 손실값이 작아지는 방향을 판단할 수 있다."
+    )
 
-        st.markdown("""
-        미분값이 0이 되면 순간적인 기울기가 0이라는 뜻이다.
+    st.markdown("""
+    - 미분값이 양수라면 가중치를 줄이는 방향으로 이동한다.
+    - 미분값이 음수라면 가중치를 늘리는 방향으로 이동한다.
+    """)
 
-        다만 미분값이 0인 지점이 항상 최솟값인 것은 아니다.
-        """)
+    st.write(
+        "따라서 앞의 예시처럼 미분값이 -1.4라면 "
+        "가중치를 증가시키는 방향으로 조정해야 한다."
+    )
 
-        st.markdown("### 산을 내려가는 상황으로 이해해 보자.")
 
-        st.markdown("""
-        현재 내가 산의 어느 지점에 있다고 가정해 보자.
-        가장 낮은 지점으로 내려가려면 먼저 어느 방향으로 움직여야 하는지 알아야겠지?
+# ③ 학습률을 이용한 조정
+with st.container(border=True):
+    st.subheader("③ 학습률을 이용해 가중치 조정하기")
 
-        이때 **미분을 활용해.**
-        """)
+    st.write(
+        "가중치를 얼마나 바꿀지는 학습률에 따라 달라진다. "
+        "학습률은 한 번에 이동하는 크기를 조절하는 값이다."
+    )
 
-        st.markdown("""
-        <div class="content-box">
-        현재 위치에서 산의 기울기를 확인하면 어느 방향으로 내려가야 하는지 판단할 수 있어.
+    st.write(
+        "경사하강법의 가중치 조정 과정을 식으로 나타내면 다음과 같다."
+    )
 
-        이처럼 미분은 현재 위치에서 함수의 값이 작아지는 방향을 알아내는 데 도움을 준다.
-        </div>
-        """, unsafe_allow_html=True)
+    st.latex(
+        r"\text{새로운 가중치}"
+        r"=\text{기존 가중치}-\text{학습률}\times\text{미분값}"
+    )
 
-    # ---------------------------
-    # 3. 미분값과 학습률
-    # ---------------------------
-    elif page == 3:
+    st.write("앞의 예시에서 학습률을 0.1이라고 가정해 보자.")
 
-        st.markdown(
-            '<div class="section-title">미분값과 학습률</div>',
-            unsafe_allow_html=True
-        )
+    st.latex(r"w_{\text{새로운 값}}=0.3-0.1\times(-1.4)")
 
-        st.markdown("""
-        <div class="content-box">
-        학습률은 경사하강법에서 한 번에 얼마나 이동할지를 결정하는
-        <span class="point">이동 크기</span>이다.
-        </div>
-        """, unsafe_allow_html=True)
+    st.latex(r"w_{\text{새로운 값}}=0.44")
 
-        st.markdown("""
-        미분값이 이동할 방향과 변화 정도를 알려 준다면, 학습률은 실제로 이동하는 크기를 조절한다.
-        """)
+    st.markdown(
+        '<p class="highlight">가중치가 0.3에서 0.44로 바뀌었다.</p>',
+        unsafe_allow_html=True
+    )
 
-        col1, col2, col3 = st.columns(3)
+    st.write(
+        "미분값이 음수였기 때문에 마이너스와 음수가 만나 "
+        "가중치가 증가한 것이다. "
+        "이처럼 미분값의 반대 방향으로 이동해 "
+        "손실값이 작아지는 방향을 찾는다."
+    )
 
-        with col1:
-            st.markdown("""
-            <div class="content-box">
-            <h3>학습률이 너무 작을 때</h3>
-            이동하는 크기가 작아 최솟값을 찾는 데 시간이 오래 걸릴 수 있다.
-            </div>
-            """, unsafe_allow_html=True)
 
-        with col2:
-            st.markdown("""
-            <div class="content-box">
-            <h3>적절할 때</h3>
-            최솟값을 향해 안정적으로 이동할 수 있다.
-            </div>
-            """, unsafe_allow_html=True)
+# ④ 반복 학습
+with st.container(border=True):
+    st.subheader("④ 다시 오차를 계산하고 반복하기")
 
-        with col3:
-            st.markdown("""
-            <div class="content-box">
-            <h3>너무 클 때</h3>
-            최솟값을 지나쳐 이동하거나 오히려 최솟값에서 멀어질 수 있다.
-            </div>
-            """, unsafe_allow_html=True)
+    st.write(
+        "가중치가 0.44로 바뀌었다고 가정하고 새로운 손실값을 계산하면 다음과 같다."
+    )
 
-    # ---------------------------
-    # 4. 경사하강법의 수식
-    # ---------------------------
-    elif page == 4:
+    st.latex(r"L=(1-0.44)^2=0.3136")
 
-        st.markdown(
-            '<div class="section-title">경사하강법의 수식</div>',
-            unsafe_allow_html=True
-        )
+    st.write(
+        "처음 손실값은 0.49였지만, 가중치를 조정한 후에는 0.3136으로 줄어들었다."
+    )
 
-        st.markdown("""
-        경사하강법은 현재 위치에서의 미분값과 학습률을 이용하여 다음 위치를 계산한다.
-        """)
+    st.markdown(
+        '<p class="highlight">0.49 → 0.3136으로 손실값이 감소했다!</p>',
+        unsafe_allow_html=True
+    )
 
-        st.markdown('<div class="formula-box">', unsafe_allow_html=True)
-        st.latex(r"x_{t+1}=x_t-\alpha f'(x_t)")
-        st.markdown('</div>', unsafe_allow_html=True)
+    st.write(
+        "실제 학습에서는 이처럼 가중치와 편향을 조정하고 손실값을 다시 계산하는 "
+        "과정을 여러 번 반복한다. 이를 통해 모델의 예측 오차를 줄여 나간다."
+    )
 
-        st.markdown("### 수식에 포함된 기호")
 
-        st.markdown("""
-        - **\(x_t\)** : 현재 위치를 의미한다. 지금 함수 위에서 내가 서 있는 지점이다.
-        - **\(x_{t+1}\)** : 다음 위치를 의미한다. 미분값과 학습률을 이용해 새롭게 계산한 지점이다.
-        - **\(\alpha\)** : 학습률이다. 한 번에 얼마나 이동할지 결정한다.
-        - **\(f'(x_t)\)** : 현재 위치에서의 미분값이다. 현재 함수의 기울기를 나타낸다.
-        """)
+# -------------------------------
+# 핵심 정리
+# -------------------------------
+with st.container(border=True):
+    st.markdown(
+        '<p class="highlight">핵심 정리</p>',
+        unsafe_allow_html=True
+    )
 
-        st.markdown("### 왜 학습률과 미분값을 곱할까?")
+    st.write(
+        "경사하강법은 손실함수를 미분해 오차가 작아지는 방향을 찾고, "
+        "학습률을 이용해 모델의 가중치와 편향을 조금씩 조정하는 방법이다. "
+        "이 과정을 반복하면서 인공지능 모델의 예측 성능을 개선한다."
+    )
 
-        st.markdown("""
-        미분값은 현재 위치에서 함수의 기울기를 나타내며,
 
-        학습률은 이 기울기를 실제 이동에 얼마나 반영할지 결정한다.
+# -------------------------------
+# 06. 느낀점
+# -------------------------------
+st.markdown(
+    '<div class="section-number">06 / REFLECTION</div>'
+    '<div class="section-title">느낀점</div>',
+    unsafe_allow_html=True
+)
 
-        따라서 미분값에 학습률을 곱하면 한 번에 이동할 크기를 정할 수 있다.
-
-        즉, 학습률은 미분값을 조절하여 최솟값을 향해 적절한 크기로 이동하도록 돕는다.
-        """)
-
-    # ---------------------------
-    # 5. 경사하강법의 작동 과정
-    # ---------------------------
-    elif page == 5:
-
-        st.markdown(
-            '<div class="section-title">경사하강법의 작동 과정</div>',
-            unsafe_allow_html=True
-        )
-
-        st.markdown("""
-        지금까지 살펴본 미분값과 학습률이 실제 경사하강법에서 어떻게 연결되는지 정리해 보자.
-        """)
-
-        steps = [
-            ("01", "현재 위치 확인", "함수 위에서 현재 위치를 정한다."),
-            ("02", "미분값 계산", "현재 위치에서 함수의 미분값을 구한다."),
-            ("03", "이동 방향 결정", "미분값의 부호를 통해 함수의 값이 작아지는 방향을 판단한다."),
-            ("04", "이동 크기 결정", "학습률을 이용하여 한 번에 이동할 크기를 정한다."),
-            ("05", "반복", "새로운 위치에서 같은 과정을 반복하며 최솟값에 가까워진다.")
-        ]
-
-        for number, title, description in steps:
-            st.markdown(f"""
-            <div class="content-box">
-                <span class="point">{number}</span>
-                <h3>{title}</h3>
-                {description}
-            </div>
-            """, unsafe_allow_html=True)
-
-        st.markdown("""
-        <div class="content-box">
-        <span class="point">핵심 정리</span><br>
-        경사하강법은 미분값으로 이동 방향을 판단하고, 학습률로 이동 크기를 조절하면서 함수의 최솟값을 찾아가는 방법이다.
-        </div>
-        """, unsafe_allow_html=True)
+with st.container(border=True):
+    st.write(
+        "경사하강법이 이미지 인식, 음성 인식, 콘텐츠 추천 등 "
+        "다양한 인공지능 기술의 학습 과정에 활용된다는 점을 알게 되었다. "
+        "특히 영상 플랫폼의 콘텐츠 추천 과정을 수학적으로 살펴보면서, "
+        "예측값과 실제 반응의 차이를 손실함수로 나타내고 "
+        "이를 미분해 모델의 가중치를 조정한다는 점을 이해할 수 있었다. "
+        "수학 시간에 배운 미분이 단순한 계산을 넘어 "
+        "인공지능이 스스로 학습하고 예측 결과를 개선하는 과정에 "
+        "활용된다는 점이 인상 깊었다."
+    )
