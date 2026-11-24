@@ -122,8 +122,20 @@ div.stButton > button:focus {
     background-color: #303030;
     font-size: 16px;
 }
+
+/* 실험 결과 글씨 색상 */
+div[data-testid="stMetricLabel"],
+div[data-testid="stMetricLabel"] p {
+    color: #bbbbbb !important;
+}
+
+div[data-testid="stMetricValue"],
+div[data-testid="stMetricValue"] div {
+    color: white !important;
+}
 </style>
 """, unsafe_allow_html=True)
+
 
 # -------------------------------
 # 화면 이동 상태
@@ -138,6 +150,7 @@ contents = [
     "경사하강법의 수식",
     "경사하강법의 작동 과정"
 ]
+
 
 # -------------------------------
 # 첫 화면
@@ -184,7 +197,7 @@ if st.session_state.page == 0:
                 st.rerun()
 
     # -------------------------------
-    # 경사하강법 직접 실험하기
+    # 직접 실험해 보기
     # -------------------------------
     st.markdown('<div class="line"></div>', unsafe_allow_html=True)
 
@@ -229,20 +242,25 @@ if st.session_state.page == 0:
             step=1
         )
 
-    # 함수 설정
+    # -------------------------------
+    # 함수와 미분함수
+    # -------------------------------
     def f(x):
         return (x - 4) ** 2
 
     def derivative(x):
         return 2 * (x - 4)
 
+    # -------------------------------
     # 경사하강법 계산
+    # -------------------------------
     positions = [start_x]
 
     current_x = start_x
 
     for i in range(iterations):
         next_x = current_x - learning_rate * derivative(current_x)
+
         positions.append(next_x)
         current_x = next_x
 
@@ -261,13 +279,13 @@ if st.session_state.page == 0:
     fig.patch.set_facecolor("#101010")
     ax.set_facecolor("#101010")
 
-    # 함수 곡선
+    # 손실함수 곡선
     ax.plot(
         x_values,
         y_values,
         color="#dddddd",
         linewidth=2.5,
-        label="손실함수"
+        label="Loss function"
     )
 
     # 최솟값 위치
@@ -276,7 +294,7 @@ if st.session_state.page == 0:
         color="#ff625e",
         linestyle="--",
         linewidth=2,
-        label="최솟값 위치 (x=4)"
+        label="Minimum (x=4)"
     )
 
     # 경사하강법 이동 경로
@@ -287,7 +305,7 @@ if st.session_state.page == 0:
         marker="o",
         markersize=7,
         linewidth=2,
-        label="이동 경로"
+        label="Gradient descent path"
     )
 
     # 시작 위치
@@ -295,44 +313,78 @@ if st.session_state.page == 0:
         positions[0],
         losses[0],
         color="#ffcc66",
-        s=100,
+        s=110,
         zorder=5,
-        label="시작 위치"
+        label="Start"
     )
 
-    # 마지막 위치
+    # 최종 위치
     ax.scatter(
         positions[-1],
         losses[-1],
         color="#55dd99",
-        s=100,
+        s=110,
         zorder=5,
-        label="현재 위치"
+        label="Final position"
     )
 
-    ax.set_xlabel("x (위치)", color="white", fontsize=12)
-    ax.set_ylabel("f(x) (함수의 값)", color="white", fontsize=12)
+    # 축 이름
+    ax.set_xlabel(
+        "x (Position)",
+        color="white",
+        fontsize=13
+    )
 
-    ax.tick_params(colors="white")
-    ax.grid(color="#555555", alpha=0.3)
+    ax.set_ylabel(
+        "f(x) (Loss)",
+        color="white",
+        fontsize=13
+    )
+
+    # 눈금과 격자
+    ax.tick_params(
+        colors="white",
+        labelsize=11
+    )
+
+    ax.grid(
+        color="#555555",
+        alpha=0.3
+    )
 
     for spine in ax.spines.values():
         spine.set_color("#777777")
 
-    legend = ax.legend(
+    # 범례
+    ax.legend(
         facecolor="#202020",
         edgecolor="#555555",
-        labelcolor="white"
+        labelcolor="white",
+        fontsize=10
     )
 
     ax.set_xlim(-4, 12)
     ax.set_ylim(bottom=0)
 
-    st.pyplot(fig)
+    st.pyplot(fig, use_container_width=True)
     plt.close(fig)
 
     # -------------------------------
-    # 결과 확인
+    # 그래프 설명
+    # -------------------------------
+    st.markdown("""
+    <div class="content-box">
+    <span class="point">그래프 읽는 방법</span><br>
+    • 흰색 곡선: 손실함수의 모양<br>
+    • 빨간색 점선: 최솟값이 위치한 x=4 지점<br>
+    • 파란색 선과 점: 경사하강법이 이동한 과정<br>
+    • 노란색 점: 처음 출발한 위치<br>
+    • 초록색 점: 반복 후 도달한 위치
+    </div>
+    """, unsafe_allow_html=True)
+
+    # -------------------------------
+    # 실험 결과
     # -------------------------------
     st.markdown("### 실험 결과")
 
@@ -364,16 +416,6 @@ if st.session_state.page == 0:
         hide_index=True
     )
 
-    st.markdown("""
-    <div class="content-box">
-    <span class="point">그래프 읽는 방법</span><br>
-    • 흰색 곡선: 손실함수의 모양<br>
-    • 빨간색 점선: 최솟값이 위치한 x=4 지점<br>
-    • 파란색 선과 점: 경사하강법이 이동한 과정<br>
-    • 노란색 점: 처음 출발한 위치<br>
-    • 초록색 점: 반복 후 도달한 위치
-    </div>
-    """, unsafe_allow_html=True)
 
 # -------------------------------
 # 각 내용 화면
