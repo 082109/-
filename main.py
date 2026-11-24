@@ -1,5 +1,7 @@
 
 import streamlit as st
+import numpy as np
+import matplotlib.pyplot as plt
 
 st.set_page_config(
     page_title="경사하강법 소개",
@@ -130,7 +132,6 @@ div.stButton > button:focus {
 if "page" not in st.session_state:
     st.session_state.page = 0
 
-
 contents = [
     "경사하강법이란?",
     "미분의 역할",
@@ -151,7 +152,7 @@ if st.session_state.page == 0:
     )
 
     st.markdown(
-        '<div class="subtitle">20107 김태희</div>',
+        '<div class="subtitle">미분으로 이해하는 인공지능의 최적화 원리</div>',
         unsafe_allow_html=True
     )
 
@@ -184,7 +185,197 @@ if st.session_state.page == 0:
                 st.session_state.page = i + 1
                 st.rerun()
 
+    # -------------------------------
+    # 경사하강법 직접 실험하기
+    # -------------------------------
     st.markdown('<div class="line"></div>', unsafe_allow_html=True)
+
+    st.markdown(
+        '<div class="section-title">직접 실험해 보기</div>',
+        unsafe_allow_html=True
+    )
+
+    st.markdown("""
+    시작 위치와 학습률, 반복 횟수를 직접 바꾸면서
+    경사하강법이 최솟값을 찾아가는 과정을 확인해 보자.
+    """)
+
+    st.markdown("### 실험 조건 설정")
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        start_x = st.slider(
+            "시작 위치",
+            min_value=-2.0,
+            max_value=10.0,
+            value=0.0,
+            step=0.5
+        )
+
+    with col2:
+        learning_rate = st.slider(
+            "학습률",
+            min_value=0.01,
+            max_value=0.9,
+            value=0.25,
+            step=0.01
+        )
+
+    with col3:
+        iterations = st.slider(
+            "반복 횟수",
+            min_value=1,
+            max_value=20,
+            value=5,
+            step=1
+        )
+
+    # 함수 설정
+    def f(x):
+        return (x - 4) ** 2
+
+    def derivative(x):
+        return 2 * (x - 4)
+
+    # 경사하강법 계산
+    positions = [start_x]
+
+    current_x = start_x
+
+    for i in range(iterations):
+        next_x = current_x - learning_rate * derivative(current_x)
+        positions.append(next_x)
+        current_x = next_x
+
+    losses = [f(x) for x in positions]
+
+    # -------------------------------
+    # 그래프 그리기
+    # -------------------------------
+    st.markdown("### 경사하강법 그래프")
+
+    x_values = np.linspace(-4, 12, 400)
+    y_values = f(x_values)
+
+    fig, ax = plt.subplots(figsize=(11, 6))
+
+    fig.patch.set_facecolor("#101010")
+    ax.set_facecolor("#101010")
+
+    # 함수 곡선
+    ax.plot(
+        x_values,
+        y_values,
+        color="#dddddd",
+        linewidth=2.5,
+        label="손실함수"
+    )
+
+    # 최솟값 위치
+    ax.axvline(
+        x=4,
+        color="#ff625e",
+        linestyle="--",
+        linewidth=2,
+        label="최솟값 위치 (x=4)"
+    )
+
+    # 경사하강법 이동 경로
+    ax.plot(
+        positions,
+        losses,
+        color="#55aaff",
+        marker="o",
+        markersize=7,
+        linewidth=2,
+        label="이동 경로"
+    )
+
+    # 시작 위치
+    ax.scatter(
+        positions[0],
+        losses[0],
+        color="#ffcc66",
+        s=100,
+        zorder=5,
+        label="시작 위치"
+    )
+
+    # 마지막 위치
+    ax.scatter(
+        positions[-1],
+        losses[-1],
+        color="#55dd99",
+        s=100,
+        zorder=5,
+        label="현재 위치"
+    )
+
+    ax.set_xlabel("x (위치)", color="white", fontsize=12)
+    ax.set_ylabel("f(x) (함수의 값)", color="white", fontsize=12)
+
+    ax.tick_params(colors="white")
+    ax.grid(color="#555555", alpha=0.3)
+
+    for spine in ax.spines.values():
+        spine.set_color("#777777")
+
+    legend = ax.legend(
+        facecolor="#202020",
+        edgecolor="#555555",
+        labelcolor="white"
+    )
+
+    ax.set_xlim(-4, 12)
+    ax.set_ylim(bottom=0)
+
+    st.pyplot(fig)
+    plt.close(fig)
+
+    # -------------------------------
+    # 결과 확인
+    # -------------------------------
+    st.markdown("### 실험 결과")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.metric(
+            "최종 위치",
+            f"{positions[-1]:.4f}"
+        )
+
+    with col2:
+        st.metric(
+            "최종 손실함수 값",
+            f"{losses[-1]:.4f}"
+        )
+
+    st.markdown("### 반복 과정 확인")
+
+    result_data = {
+        "반복 횟수": list(range(iterations + 1)),
+        "현재 위치": [round(x, 4) for x in positions],
+        "손실함수 값": [round(y, 4) for y in losses]
+    }
+
+    st.dataframe(
+        result_data,
+        use_container_width=True,
+        hide_index=True
+    )
+
+    st.markdown("""
+    <div class="content-box">
+    <span class="point">그래프 읽는 방법</span><br>
+    • 흰색 곡선: 손실함수의 모양<br>
+    • 빨간색 점선: 최솟값이 위치한 x=4 지점<br>
+    • 파란색 선과 점: 경사하강법이 이동한 과정<br>
+    • 노란색 점: 처음 출발한 위치<br>
+    • 초록색 점: 반복 후 도달한 위치
+    </div>
+    """, unsafe_allow_html=True)
 
 
 # -------------------------------
@@ -376,7 +567,6 @@ else:
         경사하강법은 현재 위치에서의 미분값과 학습률을 이용하여 다음 위치를 계산한다.
         """)
 
-        # 수식을 회색 상자 안에 표시
         st.markdown('<div class="formula-box">', unsafe_allow_html=True)
         st.latex(r"x_{t+1}=x_t-\alpha f'(x_t)")
         st.markdown('</div>', unsafe_allow_html=True)
