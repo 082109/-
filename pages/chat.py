@@ -77,30 +77,6 @@ h1, h2, h3, p, label {
     font-weight: bold;
 }
 
-.explain-box {
-    background-color: #202020;
-    border: 1px solid #393939;
-    border-radius: 12px;
-    padding: 24px;
-    line-height: 1.9;
-    margin-top: 15px;
-    margin-bottom: 20px;
-}
-
-.step-card {
-    background-color: #1d1d1d;
-    border-left: 4px solid #ff625e;
-    border-radius: 8px;
-    padding: 18px 22px;
-    margin-bottom: 12px;
-}
-
-.step-card p {
-    color: #cccccc;
-    margin-bottom: 0;
-    line-height: 1.8;
-}
-
 div[data-testid="stVerticalBlockBorderWrapper"] {
     border-color: #393939;
     border-radius: 12px;
@@ -188,7 +164,7 @@ for i, (title, description) in enumerate(examples):
 
 
 # -------------------------------
-# 02. 콘텐츠 추천 알고리즘
+# 02. 영상 플랫폼 활용 과정
 # -------------------------------
 st.markdown(
     '<div class="section-number">02 / CONTENT RECOMMENDATION</div>'
@@ -196,52 +172,49 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.write(
-    "영상 플랫폼은 사용자의 행동 데이터를 분석해 "
-    "어떤 콘텐츠에 관심을 가질지 예측한다. "
-    "이 과정에서 경사하강법이 모델을 학습시키는 데 활용될 수 있다."
-)
+st.markdown("""
+<div style="
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    background-color: #202020;
+    border: 1px solid #393939;
+    border-radius: 14px;
+    padding: 35px 20px;
+    flex-wrap: wrap;
+">
+    <div style="font-size: 21px; font-weight: bold;">
+        ① 사용자 데이터 수집
+    </div>
 
-with st.container(border=True):
-    st.subheader("① 사용자 데이터 수집")
+    <div style="color: #ff625e; font-size: 28px;">
+        →
+    </div>
 
-    st.write(
-        "플랫폼은 사용자가 어떤 영상을 시청했는지, "
-        "얼마나 오래 시청했는지, 좋아요를 눌렀는지 등의 정보를 수집한다."
-    )
+    <div style="font-size: 21px; font-weight: bold;">
+        ② 관심도 예측
+    </div>
 
-    st.write(
-        "이러한 정보는 인공지능이 학습할 수 있도록 숫자 형태의 데이터로 변환된다."
-    )
+    <div style="color: #ff625e; font-size: 28px;">
+        →
+    </div>
 
-    st.divider()
-
-    st.subheader("② 관심도 예측")
-
-    st.write(
-        "인공지능은 사용자의 시청 기록과 영상의 특징을 바탕으로 "
-        "특정 영상에 대한 관심도를 예측한다."
-    )
-
-    st.write(
-        "예를 들어 사용자가 과학 실험 영상을 자주 시청했다면, "
-        "새로운 과학 영상에도 관심을 가질 가능성이 있다고 예측할 수 있다."
-    )
-
-    st.divider()
-
-    st.subheader("③ 실제 반응과 비교")
-
-    st.write(
-        "모델이 예측한 결과를 사용자의 실제 시청이나 클릭 등의 반응과 비교한다. "
-        "예측이 실제 반응과 다르다면 그 차이를 줄이는 학습이 필요하다."
-    )
+    <div style="font-size: 21px; font-weight: bold;">
+        ③ 실제 반응과 비교
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 
 # -------------------------------
 # 숫자로 이해하는 예측 오차
 # -------------------------------
-st.markdown("### 숫자로 이해하는 예측 오차")
+st.markdown(
+    '<div class="section-number">03 / PREDICTION ERROR</div>'
+    '<div class="section-title">숫자로 이해하는 예측 오차</div>',
+    unsafe_allow_html=True
+)
 
 st.write(
     "이해를 돕기 위해 관심도 예측값을 0과 1 사이의 숫자로 나타내는 "
@@ -278,7 +251,7 @@ with st.container(border=True):
 
     st.write(
         "오차를 단순히 빼기만 하면 음수와 양수가 나타날 수 있다. "
-        "여러 예측 결과의 오차를 합칠 때 서로 상쇄되는 문제를 막기 위해 "
+        "여러 오차를 합칠 때 서로 상쇄되는 문제를 막기 위해 "
         "제곱하는 방법을 사용할 수 있다."
     )
 
@@ -297,7 +270,7 @@ with st.container(border=True):
     )
 
     st.write(
-        "이처럼 예측과 실제 반응의 차이를 수치로 나타낸 함수를 "
+        "이처럼 예측값과 실제 반응값의 차이를 수치로 나타내는 함수를 "
         "손실함수라고 한다. 여기서는 이해를 위해 제곱 오차를 사용했다."
     )
 
@@ -307,10 +280,10 @@ with st.container(border=True):
 
 
 # -------------------------------
-# 03. 경사하강법의 수학적 원리
+# 04. 경사하강법의 수학적 원리
 # -------------------------------
 st.markdown(
-    '<div class="section-number">03 / GRADIENT DESCENT</div>'
+    '<div class="section-number">04 / GRADIENT DESCENT</div>'
     '<div class="section-title">경사하강법은 이 오차를 어떻게 줄일까?</div>',
     unsafe_allow_html=True
 )
@@ -321,7 +294,7 @@ st.write(
     "이때 미분이 사용된다."
 )
 
-# 1단계
+# ① 손실함수 미분
 with st.container(border=True):
     st.subheader("① 손실함수를 미분하기")
 
@@ -361,7 +334,7 @@ with st.container(border=True):
     )
 
 
-# 2단계
+# ② 이동 방향 확인
 with st.container(border=True):
     st.subheader("② 미분값으로 이동 방향 확인하기")
 
@@ -380,7 +353,7 @@ with st.container(border=True):
     )
 
 
-# 3단계
+# ③ 학습률을 이용한 조정
 with st.container(border=True):
     st.subheader("③ 학습률을 이용해 설정값 조정하기")
 
@@ -389,7 +362,9 @@ with st.container(border=True):
         "학습률은 한 번에 이동하는 크기를 조절하는 값이다."
     )
 
-    st.write("경사하강법의 설정값 조정 과정을 식으로 나타내면 다음과 같다.")
+    st.write(
+        "경사하강법의 설정값 조정 과정을 식으로 나타내면 다음과 같다."
+    )
 
     st.latex(
         r"\text{새로운 값}"
@@ -412,12 +387,12 @@ with st.container(border=True):
     st.write(
         "미분값이 음수였기 때문에 마이너스와 음수가 만나 "
         "설정값이 증가한 것이다. "
-        "이처럼 미분값의 반대 방향으로 이동하기 때문에 "
-        "오차가 작아지는 방향을 찾을 수 있다."
+        "이처럼 미분값의 반대 방향으로 이동해 "
+        "오차가 작아지는 방향을 찾는다."
     )
 
 
-# 4단계
+# ④ 반복 학습
 with st.container(border=True):
     st.subheader("④ 다시 오차를 계산하고 반복하기")
 
@@ -443,7 +418,9 @@ with st.container(border=True):
     )
 
 
+# -------------------------------
 # 핵심 정리
+# -------------------------------
 with st.container(border=True):
     st.markdown(
         '<p class="highlight">핵심 정리</p>',
@@ -458,10 +435,10 @@ with st.container(border=True):
 
 
 # -------------------------------
-# 04. 느낀점
+# 05. 느낀점
 # -------------------------------
 st.markdown(
-    '<div class="section-number">04 / REFLECTION</div>'
+    '<div class="section-number">05 / REFLECTION</div>'
     '<div class="section-title">느낀점</div>',
     unsafe_allow_html=True
 )
