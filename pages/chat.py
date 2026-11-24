@@ -248,6 +248,8 @@ for title, description in steps:
 
 
 # -------------------------------
+
+# -------------------------------
 # 03. 실제 적용의 의미
 # -------------------------------
 st.markdown(
@@ -262,20 +264,31 @@ st.write(
     "그 차이를 줄이는 방향으로 여러 번 조정된다."
 )
 
-st.markdown("""
-<div class="explain-box">
-    <b>학습 전</b><br>
-    사용자가 어떤 영상에 관심을 가질지 정확하게 예측하지 못할 수 있다.<br><br>
+# 학습 전
+with st.container(border=True):
+    st.markdown("### 학습 전")
+    st.write(
+        "사용자가 어떤 영상에 관심을 가질지 "
+        "정확하게 예측하지 못할 수 있다."
+    )
 
-    <b>학습 과정</b><br>
-    실제 반응과 예측 결과를 비교하고, 경사하강법으로 모델을 반복해서 조정한다.<br><br>
+    st.divider()
 
-    <b>학습 후</b><br>
-    학습 과정에서 발견한 패턴을 바탕으로 사용자가 관심을 가질 만한 콘텐츠를
-    더 잘 예측할 수 있게 된다.
-</div>
-""", unsafe_allow_html=True)
+    st.markdown("### 학습 과정")
+    st.write(
+        "실제 반응과 예측 결과를 비교하고, "
+        "경사하강법으로 모델의 설정값을 반복해서 조정한다."
+    )
 
+    st.divider()
+
+    st.markdown("### 학습 후")
+    st.write(
+        "학습 과정에서 발견한 패턴을 바탕으로 "
+        "사용자가 관심을 가질 만한 콘텐츠를 더 잘 예측할 수 있게 된다."
+    )
+
+# 핵심 정리
 st.markdown("""
 <div class="explain-box">
     <span class="highlight">핵심 정리</span><br><br>
@@ -284,7 +297,6 @@ st.markdown("""
     추천 모델을 학습시키는 데 활용되는 방법이다.
 </div>
 """, unsafe_allow_html=True)
-
 
 # -------------------------------
 # 04. 느낀점
