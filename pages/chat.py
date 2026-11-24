@@ -35,12 +35,12 @@ h1, h2, h3, p, label {
 
 .sub-title {
     color: #aaaaaa;
-    font-size: 17px;
+    font-size: 20px;
     margin-bottom: 45px;
 }
 
 .section-title {
-    font-size: 27px;
+    font-size: 30px;
     font-weight: 750;
     margin-top: 55px;
     margin-bottom: 20px;
@@ -49,7 +49,7 @@ h1, h2, h3, p, label {
 .section-number {
     color: #ff625e;
     font-weight: bold;
-    font-size: 15px;
+    font-size: 17px;
 }
 
 .example-card {
@@ -62,13 +62,13 @@ h1, h2, h3, p, label {
 }
 
 .example-card h3 {
-    font-size: 19px;
+    font-size: 22px;
     margin-bottom: 12px;
 }
 
 .example-card p {
     color: #bbbbbb;
-    font-size: 14px;
+    font-size: 18px;
     line-height: 1.8;
 }
 
@@ -81,6 +81,15 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     border-color: #393939;
     border-radius: 12px;
     background-color: #202020;
+}
+
+.stMarkdown p, .stMarkdown li {
+    font-size: 19px;
+    line-height: 1.9;
+}
+
+.stCaption {
+    font-size: 15px;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -101,10 +110,59 @@ st.markdown(
 
 
 # -------------------------------
-# 01. 활용 사례
+# 01. 경사하강법이란?
 # -------------------------------
 st.markdown(
-    '<div class="section-number">01 / APPLICATION</div>'
+    '<div class="section-number">01 / CONCEPT</div>'
+    '<div class="section-title">경사하강법이란?</div>',
+    unsafe_allow_html=True
+)
+
+with st.container(border=True):
+    st.write(
+        "인공지능은 데이터를 바탕으로 결과를 예측하고, "
+        "예측 결과와 실제 결과의 차이를 줄이는 과정을 통해 학습한다."
+    )
+
+    st.write(
+        "이때 인공지능 모델은 예측에 영향을 주는 "
+        "**가중치(Weight)**와 **편향(Bias)**이라는 값을 사용한다."
+    )
+
+    st.markdown("""
+    - **가중치:** 입력된 정보가 예측 결과에 얼마나 큰 영향을 미치는지 나타내는 값
+    - **편향:** 예측 결과를 조정하는 데 사용되는 값
+    """)
+
+    st.write(
+        "인공지능은 예측 결과와 실제 결과의 차이를 "
+        "**손실함수**로 계산한다. 손실함수의 값이 작을수록 "
+        "예측 결과가 실제 결과에 가까워진다."
+    )
+
+    st.write(
+        "경사하강법은 손실함수를 미분하여 손실값이 작아지는 방향을 찾고, "
+        "가중치와 편향을 조금씩 조정하는 방법이다."
+    )
+
+    st.latex(
+        r"\text{새로운 값}"
+        r"=\text{기존 값}"
+        r"-\text{학습률}\times\text{미분값}"
+    )
+
+    st.write(
+        "여기서 학습률은 한 번에 값을 얼마나 조정할지 정하는 값이다. "
+        "이 과정을 반복하여 손실함수를 최소화하고 "
+        "인공지능 모델의 예측 성능을 개선한다."
+    )
+
+
+# -------------------------------
+# 02. 활용 사례
+# -------------------------------
+st.markdown(
+    '<div class="section-number">02 / APPLICATION</div>'
     '<div class="section-title">경사하강법은 어디에 활용될까?</div>',
     unsafe_allow_html=True
 )
@@ -163,15 +221,14 @@ for i, (title, description) in enumerate(examples):
 
 
 # -------------------------------
-# 02. 영상 플랫폼 활용 과정
+# 03. 영상 플랫폼 활용 과정
 # -------------------------------
 st.markdown(
-    '<div class="section-number">02 / CONTENT RECOMMENDATION</div>'
+    '<div class="section-number">03 / CONTENT RECOMMENDATION</div>'
     '<div class="section-title">영상 플랫폼에서는 어떻게 활용될까?</div>',
     unsafe_allow_html=True
 )
 
-# HTML 대신 Streamlit columns 사용
 with st.container(border=True):
     cols = st.columns([2, 0.4, 2, 0.4, 2])
 
@@ -192,10 +249,10 @@ with st.container(border=True):
 
 
 # -------------------------------
-# 03. 예측 오차
+# 04. 예측 오차
 # -------------------------------
 st.markdown(
-    '<div class="section-number">03 / PREDICTION ERROR</div>'
+    '<div class="section-number">04 / PREDICTION ERROR</div>'
     '<div class="section-title">숫자로 이해하는 예측 오차</div>',
     unsafe_allow_html=True
 )
@@ -264,17 +321,18 @@ with st.container(border=True):
 
 
 # -------------------------------
-# 04. 경사하강법의 수학적 원리
+# 05. 경사하강법의 수학적 원리
 # -------------------------------
 st.markdown(
-    '<div class="section-number">04 / GRADIENT DESCENT</div>'
+    '<div class="section-number">05 / GRADIENT DESCENT</div>'
     '<div class="section-title">경사하강법은 이 오차를 어떻게 줄일까?</div>',
     unsafe_allow_html=True
 )
 
 st.write(
     "오차를 계산했다면 다음 단계는 오차가 작아지도록 "
-    "인공지능 모델의 설정값을 조정하는 것이다. 이때 미분이 사용된다."
+    "인공지능 모델의 가중치와 편향을 조정하는 것이다. "
+    "이때 미분이 사용된다."
 )
 
 
@@ -283,23 +341,20 @@ with st.container(border=True):
     st.subheader("① 손실함수를 미분하기")
 
     st.write(
-        "모델의 설정값에 따라 손실값이 어떻게 달라지는지 알아보기 위해 "
+        "모델의 가중치와 편향에 따라 손실값이 어떻게 달라지는지 알아보기 위해 "
         "손실함수를 미분한다."
     )
 
     st.write(
-        "이해를 돕기 위해 모델의 설정값을 w라고 하고, "
-        "이 간단한 예시에서는 w가 예측값을 나타낸다고 생각해 보자."
+        "이해를 돕기 위해 가중치를 w라고 하고, "
+        "앞의 예시를 단순화하여 w 하나만 조정한다고 가정해 보자."
     )
 
     st.latex(r"L(w)=(1-w)^2")
 
     st.write(
-        "실제 반응값은 1이고, 현재 예측값은 0.3이므로 "
-        "w에 0.3을 대입한 것이다."
+        "실제 반응값은 1이고, 현재 가중치 w를 0.3이라고 가정하면,"
     )
-
-    st.write("이 함수를 미분하면 다음과 같다.")
 
     st.latex(r"L'(w)=2(w-1)")
 
@@ -313,8 +368,8 @@ with st.container(border=True):
     )
 
     st.write(
-        "미분값이 음수라는 것은 현재 설정값을 증가시키는 방향으로 "
-        "이동하면 손실값이 감소할 수 있다는 뜻이다."
+        "미분값이 음수이므로 현재 가중치를 증가시키는 방향으로 이동하면 "
+        "손실값이 감소하는 방향이 된다."
     )
 
 
@@ -327,32 +382,32 @@ with st.container(border=True):
     )
 
     st.markdown("""
-    - 미분값이 양수라면 설정값을 줄이는 방향으로 이동한다.
-    - 미분값이 음수라면 설정값을 늘리는 방향으로 이동한다.
+    - 미분값이 양수라면 가중치를 줄이는 방향으로 이동한다.
+    - 미분값이 음수라면 가중치를 늘리는 방향으로 이동한다.
     """)
 
     st.write(
         "따라서 앞의 예시처럼 미분값이 -1.4라면 "
-        "설정값을 증가시키는 방향으로 조정해야 한다."
+        "가중치를 증가시키는 방향으로 조정해야 한다."
     )
 
 
 # ③ 학습률을 이용한 조정
 with st.container(border=True):
-    st.subheader("③ 학습률을 이용해 설정값 조정하기")
+    st.subheader("③ 학습률을 이용해 가중치 조정하기")
 
     st.write(
-        "설정값을 얼마나 바꿀지는 학습률에 따라 달라진다. "
+        "가중치를 얼마나 바꿀지는 학습률에 따라 달라진다. "
         "학습률은 한 번에 이동하는 크기를 조절하는 값이다."
     )
 
     st.write(
-        "경사하강법의 설정값 조정 과정을 식으로 나타내면 다음과 같다."
+        "경사하강법의 가중치 조정 과정을 식으로 나타내면 다음과 같다."
     )
 
     st.latex(
-        r"\text{새로운 값}"
-        r"=\text{기존 값}-\text{학습률}\times\text{미분값}"
+        r"\text{새로운 가중치}"
+        r"=\text{기존 가중치}-\text{학습률}\times\text{미분값}"
     )
 
     st.write("앞의 예시에서 학습률을 0.1이라고 가정해 보자.")
@@ -362,15 +417,15 @@ with st.container(border=True):
     st.latex(r"w_{\text{새로운 값}}=0.44")
 
     st.markdown(
-        '<p class="highlight">설정값이 0.3에서 0.44로 바뀌었다.</p>',
+        '<p class="highlight">가중치가 0.3에서 0.44로 바뀌었다.</p>',
         unsafe_allow_html=True
     )
 
     st.write(
         "미분값이 음수였기 때문에 마이너스와 음수가 만나 "
-        "설정값이 증가한 것이다. "
+        "가중치가 증가한 것이다. "
         "이처럼 미분값의 반대 방향으로 이동해 "
-        "오차가 작아지는 방향을 찾는다."
+        "손실값이 작아지는 방향을 찾는다."
     )
 
 
@@ -379,14 +434,13 @@ with st.container(border=True):
     st.subheader("④ 다시 오차를 계산하고 반복하기")
 
     st.write(
-        "설정값이 0.44로 바뀌었으므로 예측값도 0.44가 되었다고 생각해 보자. "
-        "이때 새로운 손실값을 계산하면 다음과 같다."
+        "가중치가 0.44로 바뀌었다고 가정하고 새로운 손실값을 계산하면 다음과 같다."
     )
 
     st.latex(r"L=(1-0.44)^2=0.3136")
 
     st.write(
-        "처음 손실값은 0.49였지만, 설정값을 조정한 후에는 0.3136으로 줄어들었다."
+        "처음 손실값은 0.49였지만, 가중치를 조정한 후에는 0.3136으로 줄어들었다."
     )
 
     st.markdown(
@@ -395,8 +449,8 @@ with st.container(border=True):
     )
 
     st.write(
-        "실제 학습에서는 이처럼 설정값을 조정하고 손실값을 다시 계산하는 과정을 "
-        "여러 번 반복한다. 이를 통해 모델의 예측 오차를 줄여 나간다."
+        "실제 학습에서는 이처럼 가중치와 편향을 조정하고 손실값을 다시 계산하는 "
+        "과정을 여러 번 반복한다. 이를 통해 모델의 예측 오차를 줄여 나간다."
     )
 
 
@@ -411,16 +465,16 @@ with st.container(border=True):
 
     st.write(
         "경사하강법은 손실함수를 미분해 오차가 작아지는 방향을 찾고, "
-        "학습률을 이용해 모델의 설정값을 조금씩 조정하는 방법이다. "
+        "학습률을 이용해 모델의 가중치와 편향을 조금씩 조정하는 방법이다. "
         "이 과정을 반복하면서 인공지능 모델의 예측 성능을 개선한다."
     )
 
 
 # -------------------------------
-# 05. 느낀점
+# 06. 느낀점
 # -------------------------------
 st.markdown(
-    '<div class="section-number">05 / REFLECTION</div>'
+    '<div class="section-number">06 / REFLECTION</div>'
     '<div class="section-title">느낀점</div>',
     unsafe_allow_html=True
 )
@@ -431,7 +485,7 @@ with st.container(border=True):
         "다양한 인공지능 기술의 학습 과정에 활용된다는 점을 알게 되었다. "
         "특히 영상 플랫폼의 콘텐츠 추천 과정을 수학적으로 살펴보면서, "
         "예측값과 실제 반응의 차이를 손실함수로 나타내고 "
-        "이를 미분해 설정값을 조정한다는 점을 이해할 수 있었다. "
+        "이를 미분해 모델의 가중치를 조정한다는 점을 이해할 수 있었다. "
         "수학 시간에 배운 미분이 단순한 계산을 넘어 "
         "인공지능이 스스로 학습하고 예측 결과를 개선하는 과정에 "
         "활용된다는 점이 인상 깊었다."
